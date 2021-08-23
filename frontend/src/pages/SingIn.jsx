@@ -5,7 +5,7 @@ import { NavLink} from "react-router-dom";
 
 const SingIn = () => {
     return (
-        <div >
+        <div className="container col-md-8">
             <main className="form-signin ">
                 <form className="p-4">
                     <NavLink exact to="/"
@@ -30,7 +30,7 @@ const SingIn = () => {
                                 <input type="checkbox" value="remember-me"/> Se souvenir de moi
                             </label>
                         </div>
-                        <button className="w-100 btn btn-lg btn-primary" type="submit">Connexion</button>
+                        <button className=" btn btn-lg btn-primary" type="submit">Connexion</button>
                         <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
                 </form>
             </main>

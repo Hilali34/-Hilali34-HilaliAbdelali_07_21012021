@@ -4,7 +4,7 @@ import { NavLink} from "react-router-dom";
 
 const SignUp = () => {
     return (
-        <div >
+        <div className="container col-md-8" >
             <main className="form-signin ">
                 <form className="p-4">
 
@@ -12,7 +12,7 @@ const SignUp = () => {
                        className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                         <img src={logo} alt="logo" />
                     </NavLink>
-                    <h1 className="h3 mb-3 fw-normal">Merci de Creer votre compte</h1>
+                    <h1 className="h3 mb-3 fw-normal">Merci de Créer votre compte</h1>
 
                     <div className="form-floating mb-4">
                         <input type="email" className="form-control" id="floatingInput"
@@ -30,7 +30,7 @@ const SignUp = () => {
                         <label htmlFor="floatingPassword">Confirmer votre mot de passe</label>
                     </div>
 
-                    <button className="w-100 btn btn-lg btn-primary" type="submit">Inscription</button>
+                    <button className="btn btn-lg btn-primary" type="submit">Inscription</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
                 </form>
             </main>
