@@ -12,7 +12,7 @@ import SingIn from "./pages/SingIn";
 import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
-
+import Profil from "./pages/Profil";
 const App = () => {
     return (
         <BrowserRouter>
@@ -20,6 +20,8 @@ const App = () => {
                 <Route path="/" exact component={Home}/>
                 <Route path="/connexion" exact component={SingIn}/>
                 <Route path="/inscription" exact component={SignUp}/>
+                <Route path="/profil" exact component={Profil}/>
+
                 <Route component={NotFound}/>
             </Switch>
         </BrowserRouter>
