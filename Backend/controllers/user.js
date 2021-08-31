@@ -1,18 +1,23 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const models = require('../models')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const models = require('../models');
 
 exports.signup = (req, res, next) => {
     //Params
-    const email = req.body.email;
+
+    const email = (req.body.email).trim();
     const username = req.body.username;
     const password = req.body.password;
     const bio = req.body.bio;
 
-
     //Regex email et mot de passe
     const regexEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/;
     const regexPassword = /^(?=.*\d).{4,}$/;
+
+    if (_.isEmpty(email) || _.isEmpty(password ) || _.isEmpty(username )) {
+        return res.status(400).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
+    }
 
     if ( username.length < 3) {
         return res.status(400).json({error: "Merci de saisir un  nom d'utilisateur d'au moisn trois caractères !"})

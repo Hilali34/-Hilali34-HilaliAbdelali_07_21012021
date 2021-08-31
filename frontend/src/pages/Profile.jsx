@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from "../components/NavBar";
 
-const Profil = () => {
+const Profile = () => {
     return (
         <div>
             <NavBar/>
@@ -114,4 +114,4 @@ const Profil = () => {
     );
 };
 
-export default Profil;
+export default Profile;
