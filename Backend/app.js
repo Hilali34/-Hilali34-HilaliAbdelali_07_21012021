@@ -4,7 +4,7 @@ require('sequelize');
 const helmet = require("helmet");
 const path = require("path");
 const db =require("./models")
-const messagesRoutes = require("./routes/messages");
+const messagesRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
 const PORT = process.env.PORT || 5000;

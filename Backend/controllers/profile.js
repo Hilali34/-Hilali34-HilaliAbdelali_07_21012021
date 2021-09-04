@@ -28,12 +28,16 @@ exports.updateUserProfile = (req, res, next) => {
         where: {id: userId}
     })
         .then(user => {
-            if (user.id === userId) {
+            if (username === user.username && bio === user.bio ) {
+                return res.status(406).json({ error: "Aucune modification n'a été apportée !" })
+            }
+            if (user.id == userId) {
                 return user.update({username: username, bio: bio})
-                    .then(() => res.status(200).json({message: "Utilisateur modifié !"}))
-                    .catch(error => res.status(500).json({error: "Impossible de mettre à jour !"}));
+                    .then(() => res.status(200).json({message: "L'tilisateur  a été modifié avec succes !"}))
+                    .catch(error => res.status(500).json({error: "Impossible de mettre à jour les informations !"}));
             }
         })
+    .catch(error => res.status(500).json({error: "Utilisateur introuvable !"}));
 }
 
 exports.deleteUserProfile = (req, res, next) => {
@@ -49,7 +53,7 @@ exports.deleteUserProfile = (req, res, next) => {
             if (username !== user.username) {
                 return res.status(406).json({error: "Nom d'utilisateur incorrect !"})
             }
-            if (user.id === userId) {
+            if (user.id == userId) {
             return user.destroy()
             .then(() => res.status(200).json({message: "L'uilisateur a bien été supprimé !"}))
                 .catch(error => res.status(400).json({error: "Impossible de supprimer l'utilisateur !"}));
