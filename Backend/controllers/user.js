@@ -4,8 +4,8 @@ const _ = require('lodash');
 const models = require('../models');
 
 exports.signup = (req, res, next) => {
-    //Params
 
+    //Params
     const email = (req.body.email).trim();
     const username = req.body.username;
     const password = req.body.password;

@@ -4,7 +4,7 @@ require('sequelize');
 const helmet = require("helmet");
 const path = require("path");
 const db =require("./models")
-const messagesRoutes = require("./routes/post");
+const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
 const PORT = process.env.PORT || 5000;
@@ -33,7 +33,8 @@ app.use(helmet());
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 
-app.use("/groupomania/messages", messagesRoutes);
-app.use("/groupomania/auth", userRoutes);
+app.use("/groupomania/post", postRoutes);
+app.use("/groupomania/user", userRoutes);
+app.use("/groupomania/profile", profileRoutes);
 
 module.exports = app;
