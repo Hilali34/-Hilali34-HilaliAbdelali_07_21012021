@@ -35,7 +35,7 @@ exports.getAllPost = (req, res, next) => {
     })
         .then(post => {
             if (post === null) {
-                return res.status(404).json({ error: "Il ya aucun post !" })
+                return res.status(404).json({ error: "Il n'y a aucun post !" })
             }
             res.status(200).json({post});
         })
@@ -65,16 +65,16 @@ exports.getOnePost = (req, res, next) => {
                 return res.status(404).json({ error: "Ce post n'existe pas !" })
             }
             if (post.Comments.length === 0) {
-                return res.status(200).json({ message: "Ce post n'a pas de commentaires', post" })
+                return res.status(200).json({ message: "Ce post n'a pas de commentaires", post })
             }
             res.status(200).json({ message: "Commentaire du post", post })
         })
-        .catch(error => res.status(403).json({ error: "L'id incorrect" }))
+        .catch(error => res.status(403).json({ error: "L'id est incorrect" }))
 }
 
 exports.updatePost = (req, res, next) => {
 
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.replace("Bearer ", "");
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userId;
 
@@ -107,7 +107,7 @@ exports.updatePost = (req, res, next) => {
 
 exports.deletePost = (req, res, next) => {
 
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.replace("Bearer ", "");
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userId;
 

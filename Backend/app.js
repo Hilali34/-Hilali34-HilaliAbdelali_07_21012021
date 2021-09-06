@@ -7,6 +7,8 @@ const db =require("./models")
 const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
+const commentRoutes = require("./routes/comment");
+const likeRoutes = require("./routes/like");
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -36,5 +38,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/groupomania/post", postRoutes);
 app.use("/groupomania/user", userRoutes);
 app.use("/groupomania/profile", profileRoutes);
+app.use("/groupomania/comment", commentRoutes);
+app.use("/groupomania/like", likeRoutes);
 
 module.exports = app;
