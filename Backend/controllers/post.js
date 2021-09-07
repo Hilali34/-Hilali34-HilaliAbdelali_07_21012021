@@ -1,5 +1,6 @@
 const models = require("../models/");
 const jwt = require("jsonwebtoken");
+const _ = require('lodash');
 
 exports.createPost = (req, res, next) => {
 
@@ -25,12 +26,10 @@ exports.getAllPost = (req, res, next) => {
     models.Post.findAll({
         order: [['updatedAt', 'DESC']],
         attributes: ["id", "UserId", "title", "content", "likes", "createdAt", "updatedAt"],
-        include: [
-            {
+        include: [{
             model: models.User,
-            attributes: ["username"]
-        }
-        ]
+            attributes: ['username']
+        }]
 
     })
         .then(post => {
@@ -44,30 +43,18 @@ exports.getAllPost = (req, res, next) => {
 }
 
 exports.getOnePost = (req, res, next) => {
-
+const postId = req.params.id;
     models.Post.findOne({
         attributes: ["id", "UserId", "title", "content", "likes", "createdAt", "updatedAt"],
-        where: { id: req.params.id },
-        include: [{
-            model: models.User,
-            attributes: ['name']
-        },
-            {
-                model: models.Comment,
-                include: [{
-                    model: models.User,
-                    attributes: ['name']
-                }]
-            }],
+        where: { id: postId},
+
     })
         .then(post => {
             if (post == null) {
                 return res.status(404).json({ error: "Ce post n'existe pas !" })
             }
-            if (post.Comments.length === 0) {
-                return res.status(200).json({ message: "Ce post n'a pas de commentaires", post })
-            }
-            res.status(200).json({ message: "Commentaire du post", post })
+
+            res.status(200).json({post});
         })
         .catch(error => res.status(403).json({ error: "L'id est incorrect" }))
 }
@@ -89,7 +76,7 @@ exports.updatePost = (req, res, next) => {
         where: { id: req.params.id }
     })
         .then(post => {
-            if (title.length <= 2 || content.length <= 2) {
+            if (_.isEmpty(title) || _.isEmpty(content)) {
                 return res.status(400).json({ error: "Merci de remplir tous les champs !" })
             }
             if (title === post.title && content === post.content ) {

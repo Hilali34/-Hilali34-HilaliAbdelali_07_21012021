@@ -1,6 +1,6 @@
 const express = require("express");
-require('dotenv').config({path:"./.env"});
 require('sequelize');
+require('dotenv').config({path:"./config/.env"});
 const helmet = require("helmet");
 const path = require("path");
 const db =require("./models")
@@ -39,6 +39,6 @@ app.use("/groupomania/post", postRoutes);
 app.use("/groupomania/user", userRoutes);
 app.use("/groupomania/profile", profileRoutes);
 app.use("/groupomania/comment", commentRoutes);
-app.use("/groupomania/like", likeRoutes);
+app.use("/groupomania/", likeRoutes);
 
 module.exports = app;

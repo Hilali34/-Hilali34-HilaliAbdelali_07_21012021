@@ -1,16 +1,19 @@
 const models = require("../models/");
 const jwt = require("jsonwebtoken");
+const _ = require('lodash');
 
 exports.createComment = (req, res, next) => {
 
-    const userId = req.params.userId;
+
+    const token = req.headers.authorization.replace;
+    const decodedToken = jwt.verify(token,"RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userId;
 
     //Params
     const comment = req.body.content;
     const postId = req.params.postId;
 
-
-    if (comment.length < 3) {
+    if (_.isEmpty(comment)) {
         return res.status(400).json({ error: "Merci de remplir tous les champs !" });
     }
 
@@ -19,8 +22,8 @@ exports.createComment = (req, res, next) => {
     }
 
     models.Comment.create({
-        UserId: userId,
-        PostId: postId,
+        userId: userId,
+        postId: postId,
         content: comment,
     })
         .then(comment => res.status(201).json({ message:"Le commentaire a bien été créé !" }))
@@ -29,16 +32,14 @@ exports.createComment = (req, res, next) => {
 }
 
 exports.getAllComment = (req, res, next) => {
-    //Params
+
+    //params
     const postId = req.params.postId;
 
     models.Comment.findAll({
         attributes: ['id', 'PostId', 'UserId', 'content', 'createdAt', 'updatedAt'],
-        where: { PostId: postId },
-        include: [{
-            model: models.User,
-            attributes: ['username']
-        }]
+        where: { postId: postId },
+
     })
         .then(comment => {
             if (comment.length === 0) {
@@ -50,16 +51,16 @@ exports.getAllComment = (req, res, next) => {
 }
 
 exports.getOneComment = (req, res, next) => {
-    //Params
+
+// Params
     const commentId = req.params.commentId;
+    console.log(req.params);
 
     models.Comment.findOne({
         attributes: ["id", "PostId", "UserId", "content", "createdAt", "updatedAt"],
         where: { id: commentId },
-        include: [{
-            model: models.User,
-            attributes: ['username']
-        }]
+
+
     })
         .then(comment => {
             if (comment == null) {
@@ -77,7 +78,7 @@ exports.updateComment = (req, res, next) => {
     const userId = decodedToken.userId;
 
     //Params
-    const commentContent = req.body.content;
+    const content = req.body.content;
     const commentId = req.params.commentId;
 
     models.Comment.findOne({
@@ -85,11 +86,14 @@ exports.updateComment = (req, res, next) => {
         where: { id: commentId }
     })
         .then(comment => {
-            if (commentContent === comment.content || commentContent === null || commentContent.length < 3) {
+            if (_.isEmpty(content)) {
+                return res.status(400).json({ error: "Merci de remplir tous les champs !" })
+            }
+            if (content === comment.content ) {
                 return res.status(400).json({ error: "aucune modification n'a été apportée !" })
             }
             if (comment.UserId === userId) {
-                return comment.update({ comment: commentContent })
+                return comment.update({ content:content })
                     .then(comment => res.status(200).json({ message: 'Commentaire modifié !', PostId: comment.PostId }))
                     .catch(error => res.status(400).json({ error: 'Impossible de mettre à jour !' }));
             }
@@ -100,9 +104,9 @@ exports.updateComment = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
 
-    const token = req.headers.authorization.replace("Bearer ", "");
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
-    const userId = decodedToken.userId;
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN)
+    const userId = decodedToken.userId
 
     //Params
     const commentId = req.params.commentId;
