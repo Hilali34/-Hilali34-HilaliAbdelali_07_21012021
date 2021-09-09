@@ -16,18 +16,18 @@ exports.signup = (req, res, next) => {
     const regexPassword = /^(?=.*\d).{4,}$/;
 
     if (_.isEmpty(email) || _.isEmpty(password ) || _.isEmpty(username )) {
-        return res.status(400).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
+        return res.status(200).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
     }
 
     if ( username.length < 3) {
-        return res.status(400).json({error: "Merci de saisir un  nom d'utilisateur d'au moisn trois caractères !"})
+        return res.status(200).json({error: "Merci de saisir un  nom d'utilisateur d'au moisn trois caractères !"})
     }
 
     if (!regexEmail.test(email)) {
-        return res.status(406).json({ error: "Merci de saisir un email valide !" });
+        return res.status(200).json({ error: "Merci de saisir un email valide !" });
     }
     if (!regexPassword.test(password)) {
-        return res.status(406).json({ error: "Merci de saisir un mot de passe d'au moins quatre  caractères dont au moins un chiffre" });
+        return res.status(200).json({ error: "Merci de saisir un mot de passe d'au moins quatre  caractères dont au moins un chiffre" });
     }
 
   models.User.findOne({
@@ -52,7 +52,7 @@ exports.signup = (req, res, next) => {
                .catch(error => {
                    res.status(500).json({ error })});
        }else{
-        return res.status(409).json({error: "cette utilisateur exite deja !"})
+        return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser un autre nom et/ou un autre mail!"})
         }
 
         })
@@ -78,12 +78,12 @@ exports.login = (req, res, next) => {
     })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: "Utilisateur non trouvé ! "});
+                return res.status(200).json({ error: "Utilisateur non trouvé Merci de vous inscrire ! "});
             }
             bcrypt.compare(password, user.password)
                 .then(valid => {
                     if(!valid) {
-                        return res.status(401).json({ error: " Mot de passe incorrect ! "});
+                        return res.status(200).json({ error: " Mot de passe incorrect ! "});
                     }
                     res.status(200).json({
                         userId: user.id,

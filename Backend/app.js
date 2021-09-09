@@ -9,7 +9,7 @@ const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
 const commentRoutes = require("./routes/comment");
 const likeRoutes = require("./routes/like");
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4200;
 
 const app = express();
 
