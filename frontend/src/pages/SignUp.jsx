@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import logo from "../logo.svg";
 import { NavLink} from "react-router-dom";
 import axios from 'axios';
+import Auth from "../contexts/Auth";
 
-const SignUp = () => {
+const SignUp = ({history}) => {
+
+    const {isAuthenticated} = useContext(Auth);
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    //const [redirect, setRedirect] = useState(false);
 
     const handleSignUp = async (e) => {
         e.preventDefault()
@@ -32,7 +34,7 @@ const SignUp = () => {
 
             }else{
                 window.alert("Vous etes desormais incrit, veuillez vous connecter !");
-                window.location = "/connexion";
+                //window.location = "/connexion";
             }
 
         })
@@ -41,6 +43,13 @@ const SignUp = () => {
             })
 
     };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            history.replace("/");
+        }
+    }, [history, isAuthenticated]);
+
 
     return (
         <div className="container col-md-8" >

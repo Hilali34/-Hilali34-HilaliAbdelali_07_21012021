@@ -1,8 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, useContext} from 'react';
 import logo from "../logo.svg";
 import { NavLink} from "react-router-dom";
+import Auth from "../contexts/Auth";
+import {logout} from "../services/AuthApi";
+
 
 const NavBar = () => {
+    const {isAuthenticated, setIsAuthenticated} =useContext(Auth);
+
+    const handleLogout = () => {
+        logout();
+        setIsAuthenticated(false);
+    }
     return (
         <div className="container">
             <header
@@ -13,17 +22,11 @@ const NavBar = () => {
                 </NavLink>
 
                 <ul className="nav col-12 col-md-auto p-2 justify-content-center mb-md-0">
-                    <li><NavLink exact to="/" className="nav-link px-2 link-secondary">Accueil</NavLink></li>
-                    <li><NavLink exact to="/" className="nav-link px-2 link-dark">Features</NavLink></li>
-                    <li><NavLink exact to="/" className="nav-link px-2 link-dark">Pricing</NavLink></li>
-                    <li><NavLink exact to="/"  className="nav-link px-2 link-dark">FAQs</NavLink></li>
-                    <li><NavLink exact to="/" className="nav-link px-2 link-dark">About</NavLink></li>
+                    <li><NavLink exact to="/" className="nav-link px-2 link-secondary">Posts</NavLink></li>
+                    <li><NavLink exact to="/profile" className="nav-link px-2 link-dark">Mon Compte</NavLink></li>
+                    <li><NavLink exact to="/profile" className="nav-link px-2 link-dark"><button className=" btn btn-sm btn-primary" type="submit" onClick={handleLogout}>Déconnexion</button></NavLink></li>
                 </ul>
 
-                <div className="col-md-auto text-end">
-                   <NavLink exact to="/connexion" type="button" className="btn btn-outline-primary me-2"> Se Connecter </NavLink>
-                   <NavLink exact to="/inscription" type="button" className="btn btn-primary">S'inscrire</NavLink>
-                </div>
             </header>
         </div>
     );

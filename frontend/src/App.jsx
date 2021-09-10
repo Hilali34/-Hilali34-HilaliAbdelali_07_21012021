@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState} from "react";
 import { BrowserRouter, Switch, Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -11,20 +12,26 @@ import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import {hasAuthenticated} from "./services/AuthApi";
+import Auth from "./contexts/Auth";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
 
 
 const App = () => {
+    const [isAuthenticated, setIsAuthenticated ] = useState(hasAuthenticated());
     return (
+        <Auth.Provider value={{isAuthenticated, setIsAuthenticated}} >
         <BrowserRouter>
             <Switch>
-                <Route path="/" exact component={Home}/>
-                <Route path="/connexion" exact component={SingIn}/>
-                <Route path="/inscription" exact component={SignUp}/>
-                <Route path="/profile" exact component={Profile}/>
+                <AuthenticatedRoute exact path="/"  component={Home}/>
+                <Route exact path="/connexion"  component={SingIn}/>
+                <Route exact path="/inscription"  component={SignUp}/>
+                <AuthenticatedRoute exact path="/profile" component={Profile}/>
 
                 <Route component={NotFound}/>
             </Switch>
         </BrowserRouter>
+        </Auth.Provider>
     );
 };
 

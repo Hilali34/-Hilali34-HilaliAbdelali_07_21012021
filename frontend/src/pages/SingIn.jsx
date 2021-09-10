@@ -1,22 +1,22 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import logo from "../logo.svg";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {NavLink} from "react-router-dom";
 import axios from "axios";
+import Auth from "../contexts/Auth";
 
 
-const SingIn = () => {
+const SingIn = ({history}) => {
+
+    const {isAuthenticated, setIsAuthenticated} = useContext(Auth);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    //const [redirect, setRedirect] = useState(false);
 
     const handleSignIn = async(e) => {
         e.preventDefault()
 
         const errorMessage = document.querySelector(".error-message");
-
 
         await axios({
             method: "POST",
@@ -32,16 +32,26 @@ const SingIn = () => {
                     errorMessage.textContent = res.data.error;
                 } else {
                     // localStorage.clear();
-                    window.localStorage.setItem("user", JSON.stringify(res.data));
-                    window.location = "/";
+                    window.localStorage.setItem("userToken", JSON.stringify(res.data.token));
+                   // window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
+                    setIsAuthenticated(true);
+                    history.replace("/");
                 }
+
                 console.log(error);
             })
-            .catch((err) => {
-                console.log(err);
+            .catch((error) => {
+                console.log(error);
             })
-
     };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            history.replace("/");
+        }
+    }, [history, isAuthenticated]);
+
+
 
     return (
         <div className="container col-md-8">
@@ -72,11 +82,6 @@ const SingIn = () => {
 
                     </div>
 
-                    <div className="checkbox mb-4">
-                        <label>
-                            <input type="checkbox" value="remember-me"/> Se souvenir de moi
-                        </label>
-                    </div>
                     <p className="error-message text-danger"></p>
                     <button className=" btn btn-lg btn-primary" type="submit">Connexion</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
