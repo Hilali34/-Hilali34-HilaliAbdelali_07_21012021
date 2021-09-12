@@ -54,7 +54,7 @@ const SignUp = ({history}) => {
     return (
         <div className="container col-md-8" >
             <main className="form-signin ">
-                <form className="p-4" onSubmit={handleSignUp}>
+                <Form className="p-4" onSubmit={handleSignUp}>
                     <div className="col-md-auto text-end">
                         <NavLink exact to="/"
                                  className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
@@ -80,10 +80,10 @@ const SignUp = ({history}) => {
                                placeholder="Password" value={password}  required onChange={e => setPassword(e.target.value)}/>
                         <label htmlFor="floatingPassword">Mot de passe</label>
                     </div>
-                    <p className="error-message text-danger"></p>
+                    <p className="error-message text-danger"> </p>
                     <button className="btn btn-lg btn-primary" type="submit">Inscription</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
-                </form>
+                </Form>
             </main>
         </div>
     );

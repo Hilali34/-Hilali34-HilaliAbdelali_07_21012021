@@ -12,7 +12,7 @@ const Posts = () => {
         setLoading(true);
         axios
             .get("http://localhost:4200/groupomania/post/")
-            .then((res) => setData(res.data)
+            .then((res) => setData(res.data.post)
             )
             .catch((error) => {
                 setError(error);
@@ -38,7 +38,7 @@ const Posts = () => {
 
                 {data.map ((post) => (
 
-                    <PostCard post={post} key={post.title} />
+                    <PostCard post={post} key={post.createdAt} />
 
                 ))}
 

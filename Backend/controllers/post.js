@@ -4,10 +4,13 @@ const _ = require('lodash');
 
 exports.createPost = (req, res, next) => {
 
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET")
+    const userId = decodedToken.userId
+
     //Params
     const title = req.body.title;
     const content = req.body.content;
-    const userId = req.body.userId;
 
     if (title.length <= 3 || content <= 3) {
         return res.status(400).json({error: "Merci de remplir tous les champs !"})

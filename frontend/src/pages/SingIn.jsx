@@ -33,7 +33,9 @@ const SingIn = ({history}) => {
                 } else {
                     // localStorage.clear();
                     window.localStorage.setItem("userToken", JSON.stringify(res.data.token));
-                   // window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
+                    window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
+
+                    // window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
                     setIsAuthenticated(true);
                     history.replace("/");
                 }

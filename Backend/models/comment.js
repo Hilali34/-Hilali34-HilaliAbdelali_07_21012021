@@ -11,15 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Comment.belongsTo(models.User, { //belongsTo = type de relation
+      models.Comment.belongsTo(models.User, {
         foreignKey: { //Notre clef étrangère
           allowNull: false
         },
+        onDelete: 'CASCADE'
       }),
           models.Comment.belongsTo(models.Post, {
-            foreignKey: { //Notre clef étrangère
+            foreignKey: {
               allowNull: false
-            }
+            },
+            onDelete: 'CASCADE'
           })
     }
   };
