@@ -69,6 +69,7 @@ exports.login = (req, res, next) => {
     const email = req.body.email
     const password = req.body.password
 
+
     if (email == null || password == null) {
         return res.status(400).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
     }

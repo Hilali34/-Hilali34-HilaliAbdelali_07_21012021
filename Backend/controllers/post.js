@@ -7,6 +7,7 @@ exports.createPost = (req, res, next) => {
     //Params
     const title = req.body.title;
     const content = req.body.content;
+    const userId = req.body.userId;
 
     if (title.length <= 3 || content <= 3) {
         return res.status(400).json({error: "Merci de remplir tous les champs !"})
@@ -15,6 +16,7 @@ exports.createPost = (req, res, next) => {
     models.Post.create({
         title: title,
         content: content,
+        UserId: userId,
         likes: 0
     })
         .then(post => res.status(201).json({message: "Le Post a été créé ! ", post}))
