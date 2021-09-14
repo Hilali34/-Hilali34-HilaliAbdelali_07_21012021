@@ -52,6 +52,11 @@ exports.getOnePost = (req, res, next) => {
     models.Post.findOne({
         attributes: ["id", "UserId", "title", "content", "likes", "createdAt", "updatedAt"],
         where: {id: postId},
+        include: [{
+            model: models.User,
+            attributes: ['username']
+        }]
+
 
     })
         .then(post => {

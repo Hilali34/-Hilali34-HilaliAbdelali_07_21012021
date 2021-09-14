@@ -5,7 +5,7 @@ const _ = require('lodash');
 exports.createComment = (req, res, next) => {
 
 
-    const token = req.headers.authorization.replace;
+    const token = req.headers.authorization.replace("Bearer","").trim();
     const decodedToken = jwt.verify(token,"RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userId;
 
@@ -22,8 +22,8 @@ exports.createComment = (req, res, next) => {
     }
 
     models.Comment.create({
-        userId: userId,
-        postId: postId,
+        UserId: userId,
+        PostId: postId,
         content: comment,
     })
         .then(comment => res.status(201).json({ message:"Le commentaire a bien été créé !" }))
@@ -39,7 +39,10 @@ exports.getAllComment = (req, res, next) => {
     models.Comment.findAll({
         attributes: ['id', 'PostId', 'UserId', 'content', 'createdAt', 'updatedAt'],
         where: { postId: postId },
-
+        include: [{
+            model: models.User,
+            attributes: ['username']
+        }]
     })
         .then(comment => {
             if (comment.length === 0) {
@@ -74,7 +77,7 @@ exports.getOneComment = (req, res, next) => {
 exports.updateComment = (req, res, next) => {
 
     const token = req.headers.authorization.replace("Bearer ", "");
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const decodedToken = jwt.verify(token,"RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userId;
 
     //Params

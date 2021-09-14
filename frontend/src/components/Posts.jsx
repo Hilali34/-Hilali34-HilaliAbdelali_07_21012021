@@ -27,7 +27,7 @@ const Posts = () => {
         return <p>Data is loading...</p>;
     }
 
-    if ( !Array.isArray(data)) {
+    if ( error || !Array.isArray(data)) {
         console.log(data)
         return <p>There was an error loading your data!</p>;
     }
@@ -44,7 +44,6 @@ const Posts = () => {
 
             </ul>
         </div>
-
     );
 };
 

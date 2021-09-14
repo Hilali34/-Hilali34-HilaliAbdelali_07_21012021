@@ -1,10 +1,18 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { NavLink} from "react-router-dom";
+
+
 
 const PostCard = (props) => {
     const {post} = props;
 
-   const NewFormatCreateDate = (CreatedAt) => {
+    const userId = window.localStorage.getItem("userId");
+
+    const isAuthor = post.UserId == userId;
+
+
+    const NewFormatCreateDate = (CreatedAt) => {
        const dateArray =Array.from(CreatedAt);
         dateArray.splice(10, 1);
         dateArray.splice(15, 8);
@@ -25,7 +33,7 @@ console.log(post)
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="ml-2">
-                                <div className="h5 m-0">{post.User.username}</div>
+                                <div className="h5 m-0">Posté par : {post.User.username}</div>
                             </div>
                         </div>
 
@@ -40,9 +48,20 @@ console.log(post)
                     <p className="card-text"> {NewFormatCreateDate(post.createdAt)} </p>
                 </div>
                 <div className="card-footer">
-                    <a href="#" className="card-link"><FontAwesomeIcon icon="heart" /> Like</a>
-                    <a href="#" className="card-link"><FontAwesomeIcon icon="comment" /> Comment</a>
+                    <a  className="card-link"><FontAwesomeIcon icon="heart" /> Like</a>
+                    <NavLink to={`/commentaire/${post.id}`} className={"card-link"}><FontAwesomeIcon icon="comment" /> Commentaire</NavLink>
+
                 </div>
+
+                { isAuthor ?(
+
+                    <div className="card-footer">
+                        <button type="submit" className=" me-3 btn btn-primary">Supprimer</button>
+                        <button type="submit" className="me-3 btn btn-primary">Editer</button>
+                    </div>
+
+                    ):null}
+
             </div>
         </div>
 
