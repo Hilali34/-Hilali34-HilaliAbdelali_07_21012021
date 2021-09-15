@@ -1,6 +1,6 @@
 const express = require("express");
 require('sequelize');
-require('dotenv').config({path:"./config/.env"});
+require('dotenv').config();
 const helmet = require("helmet");
 const path = require("path");
 const db =require("./models")
@@ -9,7 +9,7 @@ const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
 const commentRoutes = require("./routes/comment");
 const likeRoutes = require("./routes/like");
-const PORT = process.env.PORT || 4200;
+
 
 const app = express();
 
@@ -21,11 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-db.sequelize.sync().then(()=> {
-    app.listen(PORT, () => {
-        console.log(`listening on: http://localhost:${PORT}`);
-    });
-});
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

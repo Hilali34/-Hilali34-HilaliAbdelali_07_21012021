@@ -54,7 +54,7 @@ const SignUp = ({history}) => {
     return (
         <div className="container col-md-8" >
             <main className="form-signin ">
-                <Form className="p-4" onSubmit={handleSignUp}>
+                <form className="p-4" onSubmit={handleSignUp}>
                     <div className="col-md-auto text-end">
                         <NavLink exact to="/"
                                  className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
@@ -83,7 +83,7 @@ const SignUp = ({history}) => {
                     <p className="error-message text-danger"> </p>
                     <button className="btn btn-lg btn-primary" type="submit">Inscription</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
-                </Form>
+                </form>
             </main>
         </div>
     );
