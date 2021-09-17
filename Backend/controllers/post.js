@@ -13,14 +13,15 @@ exports.createPost = (req, res, next) => {
     const content = req.body.content;
 
     if (title.length <= 3 || content <= 3) {
-        return res.status(400).json({error: "Merci de remplir tous les champs !"})
+        return res.status(200).json({error: "Merci de remplir tous les champs avec au moins trois caractères !"})
     }
 
     models.Post.create({
         title: title,
         content: content,
         UserId: userId,
-        likes: 0
+        likes: 0,
+        dislikes: 0
     })
         .then(post => res.status(201).json({message: "Le Post a été créé ! ", post}))
         .catch(error => res.status(500).json({error}));
@@ -30,7 +31,7 @@ exports.getAllPost = (req, res, next) => {
 
     models.Post.findAll({
         order: [['updatedAt', 'DESC']],
-        attributes: ["id", "UserId", "title", "content", "likes", "createdAt", "updatedAt"],
+        attributes: ["id", "UserId", "title", "content", "likes", "dislikes","createdAt", "updatedAt"],
         include: [{
             model: models.User,
             attributes: ['username']
@@ -50,7 +51,7 @@ exports.getAllPost = (req, res, next) => {
 exports.getOnePost = (req, res, next) => {
     const postId = req.params.id;
     models.Post.findOne({
-        attributes: ["id", "UserId", "title", "content", "likes", "createdAt", "updatedAt"],
+        attributes: ["id", "UserId", "title", "content", "likes", "dislikes", "createdAt", "updatedAt"],
         where: {id: postId},
         include: [{
             model: models.User,

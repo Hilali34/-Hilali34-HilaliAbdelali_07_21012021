@@ -32,19 +32,22 @@ const Posts = () => {
         return <p>There was an error loading your data!</p>;
     }
     console.log(data);
+
+
     return (
         <div>
             <ul>
 
                 {data.map ((post) => (
 
-                    <PostCard post={post} key={post.createdAt} />
+                    <PostCard post={post} key={post.createdAt}/>
 
                 ))}
 
             </ul>
         </div>
     );
+
 };
 
 export default Posts;

@@ -35,24 +35,38 @@ exports.signup = (req, res, next) => {
     where: { email: email }
     })
    .then( function (userFound){
+
        if(!userFound){
-           bcrypt.hash(password, 10)
-               .then(hash => {
-                   const user = models.User.create({
-                       email: email,
-                       username: username,
-                       password: hash,
-                       bio: bio
-                   })
-                       .then(user => {
-                           res.status(201).json({ message:"utilisateur crée !"});
-                       })
-                       .catch(error => res.status(400).json({ error }));
+
+           models.User.findOne({
+               attributes: ["username"],
+               where: { username: username }
+           })
+               .then(function (userFound){
+                   if (userFound){
+                       return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser un autre nom !"})
+
+                   }else{
+                       bcrypt.hash(password, 10)
+                           .then(hash => {
+                               const user = models.User.create({
+                                   email: email,
+                                   username: username,
+                                   password: hash,
+                                   bio: bio
+                               })
+                                   .then(user => {
+                                       res.status(201).json({ message:"utilisateur crée !"});
+                                   })
+                                   .catch(error => res.status(400).json({ error }));
+                           })
+                   }
                })
+
                .catch(error => {
                    res.status(500).json({ error })});
        }else{
-        return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser un autre nom et/ou un autre mail!"})
+        return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser  un autr mail!"})
         }
 
         })
@@ -90,7 +104,7 @@ exports.login = (req, res, next) => {
                         userId: user.id,
                         token: jwt.sign(
                             { userId: user.id},
-                            process.env.JWT_SECRET_TOKEN,
+                            "RANDOM_TOKEN_SECRET",
                             { expiresIn: "24h"}
                         )
                     });

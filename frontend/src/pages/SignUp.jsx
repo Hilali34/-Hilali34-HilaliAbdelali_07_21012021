@@ -34,7 +34,7 @@ const SignUp = ({history}) => {
 
             }else{
                 window.alert("Vous etes desormais incrit, veuillez vous connecter !");
-                //window.location = "/connexion";
+                window.location = "/connexion";
             }
 
         })

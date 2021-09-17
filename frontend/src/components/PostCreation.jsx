@@ -6,11 +6,13 @@ const PostCreation = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
+
     const token = window.localStorage.getItem("userToken").replace(/"/g,'')
     console.log(token)
 
     const handlePostCreation = async (e) => {
         e.preventDefault()
+
 
         await axios({
             method: "POST",
@@ -25,8 +27,9 @@ const PostCreation = () => {
 
         },[])
             .then((res)=>{
+                    setNewPost(res.data.post)
                     window.alert("Le post a été créé avec succès !");
-                    //window.location = "/connexion";
+                    window.location.reload(false);
 
             })
             .catch((error)=>{

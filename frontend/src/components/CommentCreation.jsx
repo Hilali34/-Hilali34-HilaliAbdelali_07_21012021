@@ -30,6 +30,7 @@ const CommentCreation = () => {
         },[])
 
             .then((res)=>{
+                window.location.reload(false);
                 window.alert("Le commentaire a été ajouter avec succès !");
                 //window.location = "/connexion";
 

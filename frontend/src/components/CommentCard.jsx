@@ -44,6 +44,7 @@ const CommentCard = (props) => {
         },[])
             .then((res)=>{
                 window.alert("Le Post a été supprimé avec succès !");
+                window.location.reload(false);
 
             })
             .catch((error)=>{
@@ -70,8 +71,8 @@ const CommentCard = (props) => {
 
         },[])
             .then((res)=>{
-                window.alert("Le post a été modifé avec succès !");
-                window.location = "/";
+                window.alert("Le commentaire a été modifé avec succès !");
+                window.location.reload(false);
 
             })
             .catch((error)=>{

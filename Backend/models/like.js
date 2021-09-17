@@ -29,20 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Like.init({
-    postId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Post',
-        key: 'id'
-      }
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'User',
-        key: 'id'
-      }
-    },
+
     isLike: {
       type: DataTypes.INTEGER,
       defaultValue: 0

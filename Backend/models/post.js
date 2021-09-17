@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
   Post.init({
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    likes: DataTypes.INTEGER
+    likes: DataTypes.INTEGER,
+    dislikes: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Post',

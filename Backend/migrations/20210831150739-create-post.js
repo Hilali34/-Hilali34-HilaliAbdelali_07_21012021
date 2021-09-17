@@ -8,13 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
+      UserId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
+
       },
       title: {
         allowNull: false,
@@ -25,6 +22,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       likes: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      dislikes: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
