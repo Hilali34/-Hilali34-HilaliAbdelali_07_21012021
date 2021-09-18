@@ -95,7 +95,7 @@ exports.updatePost = (req, res, next) => {
             }
             if (post.UserId === userId) {
                 return post.update({title: title, content: content})
-                    .then(() => res.status(200).json({message: "Le post bien été modifié !"}))
+                    .then(() => res.status(200).json({post, message: "Le post bien été modifié !"}))
                     .catch(error => res.status(400).json({error: "Impossible de mettre à jour !"}));
             }
 
@@ -115,7 +115,7 @@ exports.deletePost = (req, res, next) => {
         .then(post => {
             if (post.UserId === userId) {
                 return post.destroy()
-                    .then(() => res.status(200).json({message: "Le post a été bien  supprimé !"}))
+                    .then(() => res.status(200).json({id:post.id,message: "Le post a été bien  supprimé !"}))
                     .catch(error => res.status(400).json({error: "Impossible de supprimer le psot !"}));
             }
 

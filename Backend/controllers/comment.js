@@ -26,7 +26,7 @@ exports.createComment = (req, res, next) => {
         PostId: postId,
         content: comment,
     })
-        .then(comment => res.status(201).json({ message:"Le commentaire a bien été créé !" }))
+        .then(comment => res.status(201).json({ message:"Le commentaire a bien été créé !", comment}))
         .catch(error => res.status(500).json({ error }))
 
 }
@@ -97,7 +97,7 @@ exports.updateComment = (req, res, next) => {
             }
             if (comment.UserId === userId) {
                 return comment.update({ content:content })
-                    .then(comment => res.status(200).json({ message: 'Commentaire modifié !', PostId: comment.PostId }))
+                    .then(comment => res.status(200).json({comment, message: 'Commentaire modifié !' }))
                     .catch(error => res.status(400).json({ error: 'Impossible de mettre à jour !' }));
             }
 

@@ -2,21 +2,23 @@ import React, {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {NavLink} from "react-router-dom";
 import axios from "axios";
-import Modal from 'react-modal';
+import _ from "lodash";
+import {useDispatch} from "react-redux";
+import {editPost, deletePost} from "../actions/post.action";
 
+const PostCard = ({post}) => {
 
-Modal.setAppElement("#root");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [editToggle, setEditToggle] = useState(false);
 
-
-const PostCard =  (onePost,) => {
-    const {post} = onePost;
+    const userNameIsEmpty = _.isEmpty(post.User);
 
     const userId = window.localStorage.getItem("userId");
     const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     const postId = post.id;
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const dispatch = useDispatch();
 
 
     const [isLiked, setIsLiked] = useState(false);
@@ -24,8 +26,8 @@ const PostCard =  (onePost,) => {
     const [countLike, setCountLike] = useState("");
     const [countDislike, setCountDislike] = useState("");
 
-    console.log(countLike)
-    console.log(countDislike)
+    //console.log(countLike)
+    //console.log(countDislike)
 
 
     const isAuthor = post.UserId == userId;
@@ -44,59 +46,19 @@ const PostCard =  (onePost,) => {
     }
 
 
-    const handleDeletePost = async (e) => {
+
+
+    const handleUpdatePost = (e) => {
         e.preventDefault()
+        console.log(title)
+        console.log(content)
+        const data = {
+            title,
+            content
+        };
 
-        await axios({
-            method: "DELETE",
-            url: `http://localhost:4200/groupomania/post/${postId}`,
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params: {
-                id: postId
-            }
-
-        }, [])
-            .then((res) => {
-                window.alert("Le Post a été supprimé avec succès !");
-                window.location.reload(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-    };
-
-
-    const handleUpdatePost = async (e) => {
-        e.preventDefault()
-
-        await axios({
-            method: "PUT",
-            url: `http://localhost:4200/groupomania/post/${postId}`,
-            data: {
-                title,
-                content,
-            },
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params: {
-                id: postId
-            }
-
-        }, [])
-            .then((res) => {
-                window.alert("Le post a été modifé avec succès !");
-                window.location = "/";
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
+        dispatch(editPost(data,postId,token))
+        setEditToggle(false);
     };
 
     const handleLikePost = async (e) => {
@@ -158,7 +120,7 @@ const PostCard =  (onePost,) => {
                     setIsLiked(false)
                 }
                 return res.data.countLike,
-                  res.data.countDislike;
+                    res.data.countDislike;
 
             })
             .catch((error) => {
@@ -166,7 +128,7 @@ const PostCard =  (onePost,) => {
             })
 
     };
-    console.log(post)
+    // console.log(post)
     return (
         <div className="container col-md-8 mb-4">
             <div className="card gedf-card">
@@ -174,97 +136,91 @@ const PostCard =  (onePost,) => {
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="ml-2">
-                                <div className="h5 m-0">Posté par : {post.User.username}</div>
+                                <div className="h5 m-0">Posté par : {!userNameIsEmpty && post.User.username}</div>
                             </div>
                         </div>
 
                     </div>
 
                 </div>
-                <div className="card-body">
-                    <h5 className="card-title">{post.title}</h5>
-                    <p className="card-text"> {post.content} </p>
+        {editToggle ?
+
+            (
+            <form onSubmit={e =>handleUpdatePost(e)}>
+
+                <div className="form-group">
+                    <label htmlFor="floatingInput"> </label>
+                    <input type="text" className="form-control" id="floatingInput"
+                           defaultValue={post.title}
+                           required onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="floatingInput"> </label>
+                    <label className="sr-only" htmlFor="message">Publication</label>
+                    <textarea className="form-control" id="message" rows="3"
+                              defaultValue={post.content}
+                              required onChange={(e) => setContent(e.target.value)}
+                    />
                 </div>
                 <div className="card-footer">
+                    <button type="submit" className="me-3 btn btn-primary">Valider</button>
+                    <button type="button" className="me-3 btn btn-primary" onClick={() => setEditToggle(!editToggle)}>annuler</button>
+                </div>
+            </form>
+
+                ) :
+
+                (
+                    <div className="card-body">
+                        <h5 className="card-title">{post.title}</h5>
+                        <p className="card-text"> {post.content} </p>
+                    </div>
+                )
+
+                }
+                    <div className="card-footer">
                     <p className="card-text"> {NewFormatCreateDate(post.createdAt)} </p>
-                </div>
-                <div className="card-footer">
+                    </div>
+                    <div className="card-footer">
                     <span className="like-counter text-success">{countLike}</span>
                     <a className={isLiked ? "text-success mx-3" : "text-secondary mx-3"}
-                       onClick={handleLikePost}><FontAwesomeIcon icon="thumbs-up"/></a>
+                    onClick={handleLikePost}><FontAwesomeIcon icon="thumbs-up"/></a>
                     <span className="dislike-counter text-danger">{countDislike}</span>
                     <a className={isDisliked ? "text-danger mx-3" : "text-secondary mx-3"}
-                       onClick={handleDislikePost}><FontAwesomeIcon icon="thumbs-down"/></a>
+                    onClick={handleDislikePost}><FontAwesomeIcon icon="thumbs-down"/></a>
 
                     <NavLink to={`/commentaire/${post.id}`} className={"card-link"}><FontAwesomeIcon
-                        icon="comment"/> Commentaire(s)</NavLink>
+                    icon="comment"/> Commentaire(s)</NavLink>
 
-                </div>
+                    </div>
 
-                {isAuthor ? (
+                  {isAuthor ? (
 
                     <div className="card-footer">
-                        <button type="button" className=" me-3 btn btn-primary" onClick={handleDeletePost}>Supprimer
-                        </button>
-                        <button type="button" className="me-3 btn btn-primary" onClick={() => {
-                            setModalIsOpen(true)
-                        }}>Editer
-                        </button>
-                    </div>
 
-                ) : null}
+                    <button type="button" className=" me-3 btn btn-primary"
 
-            </div>
+                            onClick={() => dispatch(deletePost(postId,token))}>
 
-            <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+                    Supprimer</button>
 
-                <div className="card gedf-card  border secondary">
-                    <div className="card-header">
-                        <ul className="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
-                            <li className="nav-item">
-                                <a className="nav-link active show" id="posts-tab" data-toggle="tab" href="#posts"
-                                   role="tab" aria-controls="posts" aria-selected="true"> Votre Article</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="card-body">
+                    <button type="button" className="me-3 btn btn-primary"
 
-                        <form onSubmit={handleUpdatePost}>
+                            onClick={() => setEditToggle(!editToggle)}
 
-                            <div className="form-group">
-                                <label htmlFor="floatingInput"> </label>
-                                <input type="text" className="form-control" id="floatingInput"
-                                       placeholder={post.title}
-                                       value={title} required onChange={e => setTitle(e.target.value)}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="floatingInput"> </label>
-                                <label className="sr-only" htmlFor="message">Publication</label>
-                                <textarea className="form-control" id="message" rows="3"
-                                          placeholder={post.content}
-                                          value={content} required onChange={e => setContent(e.target.value)}
-                                />
-                            </div>
-                            <div className="card-footer">
-                                <button type="button" className=" me-3 btn btn-primary"
-                                        onClick={() => {
-                                            setModalIsOpen(false)
-                                        }}
-                                >Annuler
-                                </button>
-                                <button type="submit" className="me-3 btn btn-primary">Valider</button>
-                            </div>
-                        </form>
+                    >Editer</button>
 
                     </div>
-                </div>
-            </Modal>
-        </div>
 
-    );
+                    ) : null}
 
+                    </div>
 
-};
+                    </div>
 
-export default PostCard;
+                    );
+
+                };
+
+                export default PostCard;

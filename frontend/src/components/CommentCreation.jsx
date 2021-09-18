@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import axios from "axios";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {addComment} from "../actions/comment.action";
+import {useDispatch} from "react-redux";
 
 const CommentCreation = () => {
 
+    const dispatch = useDispatch()
     const [content, setContent] = useState("");
 
     const postId = document.URL.split("commentaire/")[1];
@@ -13,31 +14,12 @@ const CommentCreation = () => {
     const handleCommentCreation = async (e) => {
         e.preventDefault()
 
-        await axios({
-            method: "POST",
-            url:`http://localhost:4200/groupomania/comment/${postId}`,
-            data: {
-                content,
-            },
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params:{
-                id: postId
-            }
+        const data = {
+            content
+        };
 
-
-        },[])
-
-            .then((res)=>{
-                window.location.reload(false);
-                window.alert("Le commentaire a été ajouter avec succès !");
-                //window.location = "/connexion";
-
-            })
-            .catch((error)=>{
-                console.log(error);
-            })
+        await dispatch(addComment(data,token,postId))
+        setContent("");
 
     };
 

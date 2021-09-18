@@ -1,9 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import PostCard from "./PostCard";
+import {useSelector} from "react-redux";
+import _ from "lodash";
 
 
 const Posts = () => {
+
+    const posts = useSelector( (state) => state.postReducer )
+    console.log(posts)
+
+// verifier la disponibilté des données avant de mapper
+    const postsIsEmpty = _.isEmpty(posts);
+
+
+
+/*
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
@@ -33,12 +45,14 @@ const Posts = () => {
     }
     console.log(data);
 
+ */
+
 
     return (
         <div>
             <ul>
 
-                {data.map ((post) => (
+                 {!postsIsEmpty && posts.map ((post) => (
 
                     <PostCard post={post} key={post.createdAt}/>
 

@@ -1,18 +1,17 @@
 import React, {useState} from 'react';
-import axios from "axios";
-import Modal from "react-modal";
+import _ from "lodash";
+import {deleteComment, editComment} from "../actions/comment.action";
+import {useDispatch} from "react-redux";
 
-const CommentCard = (props) => {
-    const {aComment} = props;
-
-    console.log(aComment)
+const CommentCard = ({ comment}) => {
+    const dispatch = useDispatch();
+    const userNameIsEmpty = _.isEmpty(comment.User);
     const token = window.localStorage.getItem("userToken").replace(/"/g,'')
-    const commentId = aComment.id;
+    const commentId = comment.id;
     const userId = window.localStorage.getItem("userId");
-    const isAuthor = aComment.UserId == userId;
-    const [title, setTitle] = useState("");
+    const isAuthor = comment.UserId == userId;
     const [content, setContent] = useState("");
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [editToggle, setEditToggle] = useState(false);
 
     const NewFormatCreateDate = (CreatedAt) => {
         const dateArray =Array.from(CreatedAt);
@@ -27,125 +26,94 @@ const CommentCard = (props) => {
     }
 
 
-
-    const handleDeleteComment = async (e) => {
+    const handleEditComment = async (e) => {
         e.preventDefault()
 
-        await axios({
-            method: "DELETE",
-            url:`http://localhost:4200/groupomania/comment/${commentId}`,
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params:{
-                commentId: commentId
-            }
+        console.log(content)
+        const data = {
+            content
+        };
 
-        },[])
-            .then((res)=>{
-                window.alert("Le Post a été supprimé avec succès !");
-                window.location.reload(false);
-
-            })
-            .catch((error)=>{
-                console.log(error);
-            })
+        dispatch(editComment(data,commentId,token))
+        setEditToggle(false);
 
     };
-
-    const handleCommentUpdate = async (e) => {
-        e.preventDefault()
-
-        await axios({
-            method: "PUT",
-            url:`http://localhost:4200/groupomania/comment/${commentId}`,
-            data: {
-                content,
-            },
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params:{
-                id: commentId
-            }
-
-        },[])
-            .then((res)=>{
-                window.alert("Le commentaire a été modifé avec succès !");
-                window.location.reload(false);
-
-            })
-            .catch((error)=>{
-                console.log(error);
-            })
-
-    };
-
 
 
     return (
-        <div>
-            <div className="container col-md-8 mb-4" >
-                <div className="card gedf-card">
-                    <div className="card-header">
+        <div className="container col-md-8 mb-4">
+            <div className="card gedf-card">
+                <div className="card-header">
+                    <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="ml-2">
-                                    <div className="h5 m-0">Commenté par: {aComment.User.username}</div>
-                                </div>
+                            <div className="ml-2">
+                                <div className="h5 m-0">Posté par : {!userNameIsEmpty && comment.User.username}</div>
                             </div>
-
                         </div>
 
                     </div>
-                    <div className="card-body">
-                        <p className="card-text">{aComment.content}</p>
-                    </div>
-                    <div className="card-footer">
-                        <p className="card-text">{NewFormatCreateDate(aComment.createdAt)}</p>
-                    </div>
-
-                    { isAuthor ?(
-
-                        <div className="card-footer">
-                            <button type="button" className=" me-3 btn btn-primary" onClick={handleDeleteComment} >Supprimer</button>
-
-                            <button type="submit" className="me-3 btn btn-primary" onClick={ () => { setModalIsOpen(true)}}>Editer</button>
-                        </div>
-
-                    ):null}
 
                 </div>
-                <Modal isOpen={modalIsOpen} onRequestClose={ ()=> setModalIsOpen(false)} >
-                    <div>
-                        <form onSubmit={handleCommentUpdate}>
+                {editToggle ?
+
+                    (
+                        <form onSubmit={e =>handleEditComment(e)}>
 
                             <div className="form-group">
-                                <label className="sr-only" htmlFor="message">Commentaire</label>
+                                <label htmlFor="floatingInput"> </label>
+                                <label className="sr-only" htmlFor="message">Publication</label>
                                 <textarea className="form-control" id="message" rows="3"
-                                           placeholder={aComment.content}
-                                          value={content}  required onChange={e => setContent(e.target.value)}
+                                          defaultValue={comment.content}
+                                          required onChange={(e) => setContent(e.target.value)}
                                 />
                             </div>
                             <div className="card-footer">
-                                <button type="button" className=" me-3 btn btn-primary"
-                                        onClick={ () => {
-                                            setModalIsOpen(false)
-                                        }}
-                                >Annuler</button>
-                                <button type="submit" className="me-3 btn btn-primary" >Valider</button>
+                                <button type="submit" className="me-3 btn btn-primary">Valider</button>
+                                <button type="button" className="me-3 btn btn-primary" onClick={() => setEditToggle(!editToggle)}>annuler</button>
                             </div>
                         </form>
 
+                    ) :
+
+                    (
+                        <div className="card-body">
+                            <p className="card-text"> {comment.content} </p>
+                        </div>
+                    )
+
+                }
+
+                <div className="card-footer">
+                    <p className="card-text"> {NewFormatCreateDate(comment.createdAt)} </p>
+                </div>
+
+                {isAuthor ? (
+
+                    <div className="card-footer">
+
+                        <button type="button" className=" me-3 btn btn-primary"
+
+                                onClick={() => dispatch(deleteComment(commentId,token))}>
+
+                            Supprimer</button>
+
+                        <button type="button" className="me-3 btn btn-primary"
+
+                                onClick={() => setEditToggle(!editToggle)}
+
+                        >Editer</button>
+
                     </div>
-                </Modal>
+
+                ) : null}
 
             </div>
-
 
         </div>
 
     );
+
 };
 
 export default CommentCard;
+

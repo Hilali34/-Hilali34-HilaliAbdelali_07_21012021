@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import {useDispatch} from "react-redux";
+import {addPost} from "../actions/post.action";
 
 const PostCreation = () => {
 
+    const dispatch = useDispatch()
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-
 
     const token = window.localStorage.getItem("userToken").replace(/"/g,'')
     console.log(token)
@@ -13,28 +15,14 @@ const PostCreation = () => {
     const handlePostCreation = async (e) => {
         e.preventDefault()
 
+        const data = {
+            title,
+            content
+        };
 
-        await axios({
-            method: "POST",
-            url:"http://localhost:4200/groupomania/post/",
-            data: {
-                title,
-                content,
-            },
-            headers: {
-                'authorization': `Bearer ${token}`
-            }
-
-        },[])
-            .then((res)=>{
-                    setNewPost(res.data.post)
-                    window.alert("Le post a été créé avec succès !");
-                    window.location.reload(false);
-
-            })
-            .catch((error)=>{
-                console.log(error);
-            })
+        await dispatch(addPost(data,token))
+        setTitle("");
+        setContent("");
 
     };
 
