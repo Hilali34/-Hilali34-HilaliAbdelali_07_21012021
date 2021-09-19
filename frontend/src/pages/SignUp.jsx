@@ -3,6 +3,7 @@ import logo from "../logo.svg";
 import { NavLink} from "react-router-dom";
 import axios from 'axios';
 import Auth from "../contexts/Auth";
+import toast, { Toaster } from 'react-hot-toast';
 
 const SignUp = ({history}) => {
 
@@ -33,7 +34,7 @@ const SignUp = ({history}) => {
                 errorMessage.textContent = res.data.error;
 
             }else{
-                window.alert("Vous etes desormais incrit, veuillez vous connecter !");
+                successSignUP()
                 window.location = "/connexion";
             }
 
@@ -49,6 +50,8 @@ const SignUp = ({history}) => {
             history.replace("/");
         }
     }, [history, isAuthenticated]);
+
+    const successSignUP = () => toast.success("Vous etes desormais incrit, veuillez vous connecter !");
 
 
     return (

@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {NavLink} from "react-router-dom";
 import axios from "axios";
 import Auth from "../contexts/Auth";
+import toast from "react-hot-toast";
 
 
 const SingIn = ({history}) => {
@@ -12,6 +13,8 @@ const SingIn = ({history}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const successSignIn = () => toast.success("Connexion reussi  !");
+
 
     const handleSignIn = async(e) => {
         e.preventDefault()
@@ -38,6 +41,8 @@ const SingIn = ({history}) => {
                     // window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
                     setIsAuthenticated(true);
                     history.replace("/");
+                    successSignIn()
+
                 }
 
                 console.log(error);

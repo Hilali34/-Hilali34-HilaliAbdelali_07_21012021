@@ -41,7 +41,6 @@ const Comment = () => {
     },[] );
 
 
-
     if (loading) {
         return <p>Data is loading...</p>;
     }
