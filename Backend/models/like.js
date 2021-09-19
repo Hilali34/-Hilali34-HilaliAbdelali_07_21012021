@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.Like.belongsTo(models.User, {
-        foreignKey: { //Notre clef étrangère
+        foreignKey: {
           allowNull: false
         },
         onUpdate: 'CASCADE',

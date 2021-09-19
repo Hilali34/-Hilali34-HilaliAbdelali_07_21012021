@@ -1,4 +1,5 @@
 import axios from "axios";
+import _ from "lodash";
 export const GET_COMMENTS = "GET_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const EDIT_COMMENT = "EDIT_POST";
@@ -8,6 +9,7 @@ export const getComments = () => {
 
     const postId = document.URL.split("commentaire/")[1];
     const token = window.localStorage.getItem("userToken").replace(/"/g, '');
+    const tokenIsEmpty = _.isEmpty(token);
 
     return (dispatch) => {
         return   axios({
@@ -22,7 +24,7 @@ export const getComments = () => {
             }
         }, [])
             .then((res) =>{
-                    dispatch({ type: GET_COMMENTS, payload: res.data.comment})
+                !tokenIsEmpty &&  dispatch({ type: GET_COMMENTS, payload: res.data.comment})
                 }
             )
             .catch((error) => console.log(error))

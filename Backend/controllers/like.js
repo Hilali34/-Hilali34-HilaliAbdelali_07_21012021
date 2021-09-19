@@ -27,7 +27,7 @@ exports.like = (req, res, next) => {
                             return like.update({ isLike: likeInitialValue })
                                 .then(like => {
                                     post.update({ likes: post.likes - 1 })
-                                        .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Vous etes neutre !" }))
+                                        .then(post => res.status(201).json({ post,like, message: "Vous etes neutre !" }))
                                         .catch(error => res.status(500).json({ error: error }))
                                 })
                                 .catch(error => res.status(500).json({ error: error }))
@@ -36,7 +36,7 @@ exports.like = (req, res, next) => {
                             return like.update({ isLike: isLiked })
                                 .then(like => {
                                     post.update({ likes: post.likes +1, dislikes: post.dislikes -1  })
-                                        .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Vous avez liké ce post !"}))
+                                        .then(post => res.status(201).json({ post,like, message: "Vous avez liké ce post !"}))
                                         .catch(error => res.status(500).json({ error: error}))
                                 })
                         }
@@ -44,7 +44,7 @@ exports.like = (req, res, next) => {
                         return like.update({ isLike: isLiked })
                             .then(like => {
                                 post.update({ likes: post.likes+1 })
-                                    .then(post => res.status(201).json({countLike: post.likes,countDislike: post.dislikes, message: " Vous avez liké ce post !", count: post.like }))
+                                    .then(post => res.status(201).json({post,like, message: " Vous avez liké ce post !"}))
                                     .catch(error => res.status(500).json({ error: error }))
                             })
                             .catch(error => res.status(500).json({ error: error }))
@@ -52,7 +52,7 @@ exports.like = (req, res, next) => {
                     models.Like.create({ UserId: userId, PostId: postId, isLike: isLiked })
                         .then(like => {
                             post.update({ likes: post.likes+1 })
-                                .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: 'Vous avez liké ce post !', post, like }))
+                                .then(post => res.status(201).json({post,like, message: 'Vous avez liké ce post !'}))
                                 .catch(error => res.status(500).json({ error: error }))
                         })
                         .catch(error => res.status(500).json({ error: "impossible de like le post" }))
@@ -87,7 +87,7 @@ exports.dislike = (req, res, next) => {
                             return like.update({ isLike:likeInitialValue })
                                 .then(like => {
                                     post.update({ dislikes: post.dislikes-1 })
-                                        .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Vous etes neutre !" }))
+                                        .then(post => res.status(201).json({post, like,message: "Vous etes neutre !" }))
                                         .catch(error => res.status(500).json({ error: error}))
                                 })
                                 .catch(error => res.status(500).json({ error: error}))
@@ -96,14 +96,14 @@ exports.dislike = (req, res, next) => {
                             return like.update({ isLike: isDisliked })
                                 .then(like => {
                                     post.update({ dislikes: post.dislikes+1 , likes: post.likes-1  })
-                                        .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Post disliké !"}))
+                                        .then(post => res.status(201).json({ post,like, message: "Post disliké !"}))
                                         .catch(error => res.status(500).json({ error: error}))
                                 })
                         }
                         return like.update({ isLike: isDisliked })
                             .then(like => {
                                 post.update({ dislikes: post.dislikes+1  })
-                                    .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Post disliké !"}))
+                                    .then(post => res.status(201).json({ post,like, message: "Post disliké !"}))
                                     .catch(error => res.status(500).json({ error: error}))
                             })
                             .catch(error => res.status(500).json({ error: error}))
@@ -111,7 +111,7 @@ exports.dislike = (req, res, next) => {
                     models.Like.create({ UserId: userId, PostId: postId, isLike: isDisliked })
                         .then(like => {
                             post.update({ dislikes: post.dislikes+1 })
-                                .then(post => res.status(201).json({ countLike: post.likes,countDislike: post.dislikes, message: "Post disliké !", post, like }))
+                                .then(post => res.status(201).json({ post,like, message: "Post disliké !" }))
                                 .catch(error => res.status(500).json({ error: error }))
                         })
                         .catch(error => res.status(500).json({ error: error }))
@@ -120,3 +120,6 @@ exports.dislike = (req, res, next) => {
         })
         .catch(error => res.status(406).json({ error: "Le post est  introuvable !" }))
 }
+
+
+

@@ -5,7 +5,9 @@ const initialState = {};
 export default function commentReducer(state = initialState, action){
     switch (action.type){
         case GET_COMMENTS:
-            return action.payload
+            if(action.payload){
+                return action.payload;
+            }else return "";
         case ADD_COMMENT:
             return [action.payload, ...state];
         case EDIT_COMMENT:

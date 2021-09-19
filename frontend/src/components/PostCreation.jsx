@@ -51,7 +51,6 @@ const PostCreation = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="floatingInput"> </label>
                             <label className="sr-only" htmlFor="message">Publication</label>
                             <textarea className="form-control" id="message" rows="3"
                                       placeholder="Exprimez-vous!"

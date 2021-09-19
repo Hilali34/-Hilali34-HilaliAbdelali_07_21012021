@@ -3,7 +3,6 @@ require('sequelize');
 require('dotenv').config();
 const helmet = require("helmet");
 const path = require("path");
-const db =require("./models")
 const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");

@@ -12,7 +12,7 @@ exports.getUserProfile = (req, res, next) => {
             if (user == null) {
                 return res.status(404).json({ error: "Utilisateur non trouvé !" })
             }
-            res.status(200).json({ user })
+            res.status(200).json({ user,message: "L'utilisateur a bien été supprimé"})
         })
         .catch(error => res.status(500).json({ error: "Impossible de récupérer l'tilisateur !"}))
 }
@@ -20,6 +20,7 @@ exports.getUserProfile = (req, res, next) => {
 exports.updateUserProfile = (req, res, next) => {
     //Params
     const userId = req.params.userId;
+    const email = req.body.email;
     const username = req.body.username;
     const bio = req.body.bio;
 
@@ -28,12 +29,10 @@ exports.updateUserProfile = (req, res, next) => {
         where: {id: userId}
     })
         .then(user => {
-            if (username === user.username && bio === user.bio ) {
-                return res.status(406).json({ error: "Aucune modification n'a été apportée !" })
-            }
+
             if (user.id == userId) {
-                return user.update({username: username, bio: bio})
-                    .then(() => res.status(200).json({message: "L'tilisateur  a été modifié avec succes !"}))
+                return user.update({email:email, username: username, bio: bio})
+                    .then(() => res.status(200).json({user,message: "L'tilisateur  a été modifié avec succes !"}))
                     .catch(error => res.status(500).json({error: "Impossible de mettre à jour les informations !"}));
             }
         })
@@ -43,22 +42,26 @@ exports.updateUserProfile = (req, res, next) => {
 exports.deleteUserProfile = (req, res, next) => {
   //Params
    const userId = req.params.userId;
-   const username = req.body.username;
 
-   models.User.findOne({
-       attributes: ["id", "username"],
-       where: {id: userId}
-   })
-       .then(user => {
-            if (username !== user.username) {
-                return res.status(406).json({error: "Nom d'utilisateur incorrect !"})
-            }
-            if (user.id == userId) {
-            return user.destroy()
-            .then(() => res.status(200).json({message: "L'uilisateur a bien été supprimé !"}))
-                .catch(error => res.status(400).json({error: "Impossible de supprimer l'utilisateur !"}));
-            }
-            res.status(400).json({error: "Impossible de supprimer l'utilisateur !"});
-            })
-                 .catch(error => res.status(404).json({error: "Utilisateur non trouvé !"}));
+
+    models.Comment.destroy({
+        where:{Userid: userId}
+    })
+
+    models.Like.destroy({
+        where:{Userid: userId}
+    })
+
+    models.User.findOne({
+           where: {id: userId}
+       })
+           .then(user => {
+                if (user.id == userId) {
+                return user.destroy()
+                .then(() => res.status(201).json({message: "L'uilisateur a bien été supprimé !"}))
+                    .catch(error => res.status(400).json({error: "Impossible de supprimer l'utilisateur !"}));
+                }
+                res.status(400).json({error: "Impossible de supprimer l'utilisateur !"});
+                })
+                     .catch(error => res.status(404).json({error: "Utilisateur non trouvé !"}));
 }

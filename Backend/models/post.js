@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }),
+
           // RELATION "hasMAny" LE POST PEUT AVOIR PLUSIEUR COMMENATIRE
           models.Post.hasMany(models.Comment, {
             onUpdate: 'CASCADE',

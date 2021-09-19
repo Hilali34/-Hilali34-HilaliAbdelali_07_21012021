@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {NavLink} from "react-router-dom";
-import axios from "axios";
 import _ from "lodash";
-import {useDispatch} from "react-redux";
-import {editPost, deletePost} from "../actions/post.action";
+import {useDispatch, useSelector} from "react-redux";
+import {editPost, deletePost, likePost, dislikePost} from "../actions/post.action";
 
 const PostCard = ({post}) => {
+
+
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -14,20 +15,13 @@ const PostCard = ({post}) => {
 
     const userNameIsEmpty = _.isEmpty(post.User);
 
+
     const userId = window.localStorage.getItem("userId");
     const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     const postId = post.id;
 
     const dispatch = useDispatch();
 
-
-    const [isLiked, setIsLiked] = useState(false);
-    const [isDisliked, setIsDisliked] = useState(false);
-    const [countLike, setCountLike] = useState("");
-    const [countDislike, setCountDislike] = useState("");
-
-    //console.log(countLike)
-    //console.log(countDislike)
 
 
     const isAuthor = post.UserId == userId;
@@ -46,9 +40,7 @@ const PostCard = ({post}) => {
     }
 
 
-
-
-    const handleUpdatePost = (e) => {
+    const handleEditPost = (e) => {
         e.preventDefault()
         console.log(title)
         console.log(content)
@@ -64,33 +56,13 @@ const PostCard = ({post}) => {
     const handleLikePost = async (e) => {
         e.preventDefault()
 
-        await axios({
-            method: "GET",
-            url: `http://localhost:4200/groupomania/post/like/${postId}`,
+        console.log(post)
 
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params: {
-                id: postId
-            }
-
-        }, [])
-            .then((res) => {
-                setCountLike(res.data.countLike)
-                setCountDislike(res.data.countDislike)
-                if (isLiked) {
-                    setIsLiked(false)
-                } else {
-                    setIsLiked(true)
-                    setIsDisliked(false)
-                }
-
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        await dispatch(likePost(postId,token));
+         setIsLiked(true);
+        if (isDisliked){
+            setIsDisliked(false)
+        }
 
     };
 
@@ -98,37 +70,17 @@ const PostCard = ({post}) => {
         e.preventDefault()
 
 
-        await axios({
-            method: "GET",
-            url: `http://localhost:4200/groupomania/post/dislike/${postId}`,
-
-            headers: {
-                'authorization': `Bearer ${token}`
-            },
-            params: {
-                id: postId
-            }
-
-        }, [])
-            .then((res) => {
-                setCountLike(res.data.countLike)
-                setCountDislike(res.data.countDislike)
-                if (isDisliked) {
-                    setIsDisliked(false)
-                } else {
-                    setIsDisliked(true)
-                    setIsLiked(false)
-                }
-                return res.data.countLike,
-                    res.data.countDislike;
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        await dispatch(dislikePost(postId,token));
+        setIsDisliked(true);
+        if (isLiked){
+            setIsLiked(false)
+        }
 
     };
-    // console.log(post)
+
+    const [isLiked, setIsLiked] = useState();
+    const [isDisliked, setIsDisliked] = useState();
+
     return (
         <div className="container col-md-8 mb-4">
             <div className="card gedf-card">
@@ -146,7 +98,7 @@ const PostCard = ({post}) => {
         {editToggle ?
 
             (
-            <form onSubmit={e =>handleUpdatePost(e)}>
+            <form onSubmit={e =>handleEditPost(e)}>
 
                 <div className="form-group">
                     <label htmlFor="floatingInput"> </label>
@@ -183,11 +135,11 @@ const PostCard = ({post}) => {
                     <p className="card-text"> {NewFormatCreateDate(post.createdAt)} </p>
                     </div>
                     <div className="card-footer">
-                    <span className="like-counter text-success">{countLike}</span>
-                    <a className={isLiked ? "text-success mx-3" : "text-secondary mx-3"}
+                    <span className="like-counter text-success">{post.likes}</span>
+                    <a className="text-primary mx-3"
                     onClick={handleLikePost}><FontAwesomeIcon icon="thumbs-up"/></a>
-                    <span className="dislike-counter text-danger">{countDislike}</span>
-                    <a className={isDisliked ? "text-danger mx-3" : "text-secondary mx-3"}
+                    <span className="dislike-counter text-danger">{post.dislikes}</span>
+                    <a className="text-primary mx-3"
                     onClick={handleDislikePost}><FontAwesomeIcon icon="thumbs-down"/></a>
 
                     <NavLink to={`/commentaire/${post.id}`} className={"card-link"}><FontAwesomeIcon

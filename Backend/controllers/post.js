@@ -30,11 +30,11 @@ exports.createPost = (req, res, next) => {
 exports.getAllPost = (req, res, next) => {
 
     models.Post.findAll({
-        order: [['updatedAt', 'DESC']],
+        order: [["updatedAt", "DESC"]],
         attributes: ["id", "UserId", "title", "content", "likes", "dislikes","createdAt", "updatedAt"],
         include: [{
             model: models.User,
-            attributes: ['username']
+            attributes: ["username"]
         }]
 
     })

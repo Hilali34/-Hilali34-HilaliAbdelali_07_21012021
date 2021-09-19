@@ -23,17 +23,17 @@ const App = () => {
 
     return (
         <Auth.Provider value={{isAuthenticated, setIsAuthenticated}} >
-        <BrowserRouter>
-            <Switch>
-                <AuthenticatedRoute exact path="/"  component={Home}/>
-                <Route exact path="/connexion"  component={SingIn}/>
-                <Route exact path="/inscription"  component={SignUp}/>
-                <AuthenticatedRoute exact path={"/commentaire/:postId"}  component={Comment}/>
-                <AuthenticatedRoute exact path="/profile" component={Profile}/>
+            <BrowserRouter>
+                <Switch>
+                    <AuthenticatedRoute exact path="/"  component={Home}/>
+                    <Route exact path="/connexion"  component={SingIn}/>
+                    <Route exact path="/inscription"  component={SignUp}/>
+                    <AuthenticatedRoute exact path={"/commentaire/:postId"}  component={Comment}/>
+                    <AuthenticatedRoute exact path="/profile" component={Profile}/>
 
-                <Route component={NotFound}/>
-            </Switch>
-        </BrowserRouter>
+                    <Route component={NotFound}/>
+                </Switch>
+            </BrowserRouter>
         </Auth.Provider>
     );
 };

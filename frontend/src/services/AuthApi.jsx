@@ -13,6 +13,7 @@ export function hasAuthenticated(){
 
 export function logout(){
     window.localStorage.removeItem("userToken");
+    window.localStorage.removeItem("userId");
 }
 
 
