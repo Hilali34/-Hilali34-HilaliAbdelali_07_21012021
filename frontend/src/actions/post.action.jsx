@@ -1,5 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
+import {logout} from "../services/AuthApi";
 
 
 export const GET_POSTS = "GET_POSTS";
@@ -92,6 +93,7 @@ export const deletePost = (postId,token) => {
             .then((res) =>{
                 console.log(res)
                 dispatch({ type: DELETE_POST, payload: { postId } });
+
                 }
             )
             .catch((error) => console.log(error))

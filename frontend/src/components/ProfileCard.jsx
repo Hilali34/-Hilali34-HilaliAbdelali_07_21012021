@@ -3,8 +3,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {editProfile,deleteProfile} from "../actions/profile.action";
 import _ from "lodash";
 import {logout} from "../services/AuthApi";
+import {successDeleteProfile} from "../services/notification";
 
-const ProfileCard = () => {
+const ProfileCard = ({history}) => {
 
     const aProfile = useSelector( (state) => state.profileReducer )
     const profileIsEmpty = _.isEmpty(aProfile);
@@ -103,7 +104,8 @@ const ProfileCard = () => {
                                                     onClick={() =>{
                                                         dispatch(deleteProfile(userId,token))
                                                         logout()
-                                                        location.reload();
+                                                        location.replace("/")
+
                                                     } }
                                             >Supprimer Mon compte
                                             </button>

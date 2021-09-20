@@ -1,5 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
+import {successDeleteProfile} from "../services/notification";
 
 
 export const GET_PROFILE = "GET_PROFILE";
@@ -27,6 +28,7 @@ export const getProfile = () => {
             .then((res) =>{
                 console.log(res)
                 !tokenIsEmpty && dispatch({ type: GET_PROFILE, payload: res.data.user})
+
                 }
             )
             .catch((error) => console.log(error))
@@ -79,6 +81,8 @@ export const deleteProfile = (userId,token) => {
             .then((res) =>{
                     console.log(res)
                     dispatch({ type: DELETE_PROFILE, payload: { id:res.data.user.id } });
+                    successDeleteProfile.success("Votre compte a bien été supprimer !" );
+
                 }
             )
             .catch((error) => console.log(error))

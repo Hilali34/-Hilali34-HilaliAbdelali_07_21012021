@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {NavLink} from "react-router-dom";
 import axios from "axios";
 import Auth from "../contexts/Auth";
-import toast from "react-hot-toast";
+import {errorSignIn, successSignIn} from "../services/notification";
 
 
 const SingIn = ({history}) => {
@@ -13,13 +13,13 @@ const SingIn = ({history}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const successSignIn = () => toast.success("Connexion reussi  !");
+
+
+
 
 
     const handleSignIn = async(e) => {
         e.preventDefault()
-
-        const errorMessage = document.querySelector(".error-message");
 
         await axios({
             method: "POST",
@@ -32,20 +32,20 @@ const SingIn = ({history}) => {
             .then((res) => {
                 if (res.data.error) {
                     console.log(res.data.error)
-                    errorMessage.textContent = res.data.error;
+                    errorSignIn.error(res.data.error);
+
                 } else {
-                    // localStorage.clear();
+
+                    localStorage.clear();
                     window.localStorage.setItem("userToken", JSON.stringify(res.data.token));
                     window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
-
-                    // window.localStorage.setItem("userId", JSON.stringify(res.data.userId));
                     setIsAuthenticated(true);
-                    history.replace("/");
-                    successSignIn()
+                    window.location = ("/")
+
 
                 }
 
-                console.log(error);
+
             })
             .catch((error) => {
                 console.log(error);
@@ -53,12 +53,12 @@ const SingIn = ({history}) => {
     };
 
     useEffect(() => {
+
         if (isAuthenticated) {
+
             history.replace("/");
         }
     }, [history, isAuthenticated]);
-
-
 
     return (
         <div className="container col-md-8">
@@ -89,7 +89,6 @@ const SingIn = ({history}) => {
 
                     </div>
 
-                    <p className="error-message text-danger"></p>
                     <button className=" btn btn-lg btn-primary" type="submit">Connexion</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
                 </form>

@@ -4,7 +4,9 @@ import PostCreation from "../components/PostCreation";
 import Posts from "../components/Posts";
 
 
+
 const Home = () => {
+
     return (
         <div>
            <NavBar/>

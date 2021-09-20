@@ -3,7 +3,8 @@ import logo from "../logo.svg";
 import { NavLink} from "react-router-dom";
 import axios from 'axios';
 import Auth from "../contexts/Auth";
-import toast, { Toaster } from 'react-hot-toast';
+import {successSignUp, errorSignUp} from "../services/notification";
+
 
 const SignUp = ({history}) => {
 
@@ -16,7 +17,6 @@ const SignUp = ({history}) => {
 
     const handleSignUp = async (e) => {
         e.preventDefault()
-        const errorMessage = document.querySelector(".error-message");
 
         await axios({
             method: "POST",
@@ -31,11 +31,11 @@ const SignUp = ({history}) => {
             .then((res)=>{
             if (res.data.error){
                 console.log(res);
-                errorMessage.textContent = res.data.error;
+                errorSignUp.error(res.data.error);
 
             }else{
-                successSignUP()
-                window.location = "/connexion";
+                history.replace("/connexion");
+                successSignUp.success("Inscription reussi.Merci de vous conneter !");
             }
 
         })
@@ -51,7 +51,6 @@ const SignUp = ({history}) => {
         }
     }, [history, isAuthenticated]);
 
-    const successSignUP = () => toast.success("Vous etes desormais incrit, veuillez vous connecter !");
 
 
     return (
@@ -83,7 +82,6 @@ const SignUp = ({history}) => {
                                placeholder="Password" value={password}  required onChange={e => setPassword(e.target.value)}/>
                         <label htmlFor="floatingPassword">Mot de passe</label>
                     </div>
-                    <p className="error-message text-danger"> </p>
                     <button className="btn btn-lg btn-primary" type="submit">Inscription</button>
                     <p className="mt-5 mb-3 text-muted">© 2017–2021</p>
                 </form>

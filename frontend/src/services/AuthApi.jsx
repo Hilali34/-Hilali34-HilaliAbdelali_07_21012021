@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import {successLogOut} from "./notification";
 
 
 export function hasAuthenticated(){
@@ -14,6 +15,7 @@ export function hasAuthenticated(){
 export function logout(){
     window.localStorage.removeItem("userToken");
     window.localStorage.removeItem("userId");
+    successLogOut.success("Deconnexion reussi ! A Bientôt...");
 }
 
 
