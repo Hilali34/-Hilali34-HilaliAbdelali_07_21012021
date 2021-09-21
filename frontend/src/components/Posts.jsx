@@ -4,10 +4,9 @@ import {useSelector} from "react-redux";
 import _ from "lodash";
 
 
-
 const Posts = () => {
 
-    const posts = useSelector( (state) => state.postReducer )
+    const posts = useSelector((state) => state.postReducer)
     console.log(posts)
 
 // verifier la disponibilté des données avant de mapper
@@ -17,7 +16,7 @@ const Posts = () => {
         <div>
             <ul>
 
-                 {!postsIsEmpty && posts.map ((post) => (
+                {!postsIsEmpty && posts.map((post) => (
 
                     <PostCard post={post} key={post.createdAt}/>
 

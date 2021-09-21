@@ -8,7 +8,7 @@ const CommentCreation = () => {
     const [content, setContent] = useState("");
 
     const postId = document.URL.split("commentaire/")[1];
-    const token = window.localStorage.getItem("userToken").replace(/"/g,'')
+    const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     //console.log(token)
 
     const handleCommentCreation = async (e) => {
@@ -18,7 +18,7 @@ const CommentCreation = () => {
             content
         };
 
-        await dispatch(addComment(data,token,postId))
+        await dispatch(addComment(data, token, postId))
         setContent("");
 
     };
@@ -32,7 +32,7 @@ const CommentCreation = () => {
                     <label className="sr-only" htmlFor="message">Publication</label>
                     <textarea className="form-control" id="message" rows="3"
                               placeholder="Exprimez-vous!"
-                              value={content}  required onChange={e => setContent(e.target.value)}
+                              value={content} required onChange={e => setContent(e.target.value)}
                     />
                 </div>
                 <div className="btn-toolbar justify-content-between mt-3">

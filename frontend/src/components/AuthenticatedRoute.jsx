@@ -3,13 +3,13 @@ import {Redirect, Route} from "react-router-dom";
 import Auth from "../contexts/Auth";
 
 const AuthenticatedRoute = ({path, component}) => {
-  const {isAuthenticated} = useContext(Auth);
+    const {isAuthenticated} = useContext(Auth);
 
-  return isAuthenticated ? (
-      <Route exact path={path} component={component}/>
-  ) : (
-      <Redirect to="/connexion" />
-  )
+    return isAuthenticated ? (
+        <Route exact path={path} component={component}/>
+    ) : (
+        <Redirect to="/connexion"/>
+    )
 };
 
 

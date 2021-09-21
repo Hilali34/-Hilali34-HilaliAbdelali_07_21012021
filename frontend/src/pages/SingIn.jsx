@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {NavLink} from "react-router-dom";
 import axios from "axios";
 import Auth from "../contexts/Auth";
-import {errorSignIn, successSignIn} from "../services/notification";
+import {errorSignIn, successSignIn} from "../services/notifications";
 
 
 const SingIn = ({history}) => {
@@ -15,10 +15,7 @@ const SingIn = ({history}) => {
     const [password, setPassword] = useState("");
 
 
-
-
-
-    const handleSignIn = async(e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault()
 
         await axios({

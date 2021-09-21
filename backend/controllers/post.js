@@ -31,7 +31,7 @@ exports.getAllPost = (req, res, next) => {
 
     models.Post.findAll({
         order: [["updatedAt", "DESC"]],
-        attributes: ["id", "UserId", "title", "content", "likes", "dislikes","createdAt", "updatedAt"],
+        attributes: ["id", "UserId", "title", "content", "likes", "dislikes", "createdAt", "updatedAt"],
         include: [{
             model: models.User,
             attributes: ["username"]
@@ -115,7 +115,7 @@ exports.deletePost = (req, res, next) => {
         .then(post => {
             if (post.UserId === userId) {
                 return post.destroy()
-                    .then(() => res.status(200).json({id:post.id,message: "Le post a été bien  supprimé !"}))
+                    .then(() => res.status(200).json({id: post.id, message: "Le post a été bien  supprimé !"}))
                     .catch(error => res.status(400).json({error: "Impossible de supprimer le psot !"}));
             }
 

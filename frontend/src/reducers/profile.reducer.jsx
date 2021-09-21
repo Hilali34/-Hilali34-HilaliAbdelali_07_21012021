@@ -1,9 +1,9 @@
-import {GET_PROFILE,EDIT_PROFILE, DELETE_PROFILE} from "../actions/profile.action";
+import {GET_PROFILE, EDIT_PROFILE, DELETE_PROFILE} from "../actions/profile.action";
 
 const initialState = {};
 
-export default function profileReducer(state = initialState, action){
-    switch (action.type){
+export default function profileReducer(state = initialState, action) {
+    switch (action.type) {
         case GET_PROFILE:
             return action.payload;
 

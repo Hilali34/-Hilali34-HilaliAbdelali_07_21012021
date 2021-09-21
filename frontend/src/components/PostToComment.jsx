@@ -2,35 +2,35 @@ import React, {useEffect, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import CommentCreation from "./CommentCreation";
+import {newFormatDate} from "../utils/formatDate";
 
 const Comment = () => {
-
     const [data, setData] = useState([]);
     const [username, setUsername] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState();
 
-    useEffect( async() => {
+    useEffect(async () => {
 
         setLoading(true);
         const postId = document.URL.split("commentaire/")[1];
-        const token = window.localStorage.getItem("userToken").replace(/"/g,'')
+        const token = window.localStorage.getItem("userToken").replace(/"/g, '')
 
-           await axios
+        await axios
             .get((`http://localhost:4200/groupomania/post/${postId}`), {
                 headers: {
-            'authorization': `Bearer ${token}`},
-                    params:{
-                id: postId
-                    }
+                    'authorization': `Bearer ${token}`
+                },
+                params: {
+                    id: postId
+                }
 
             })
-            .then((res) =>
-        {
-            setData(res.data.post)
-            setUsername(res.data.post.User.username)
-        } )
+            .then((res) => {
+                setData(res.data.post)
+                setUsername(res.data.post.User.username)
+            })
             .catch((error) => {
                 setError(error);
             })
@@ -38,7 +38,7 @@ const Comment = () => {
                 setLoading(false);
             });
 
-    },[] );
+    }, []);
 
 
     if (loading) {
@@ -46,10 +46,10 @@ const Comment = () => {
     }
 
 
-     return (
+    return (
 
         <div>
-            <div className="container col-md-8 mb-4" >
+            <div className="container col-md-8 mb-4">
                 <div className="card gedf-card">
                     <div className="card-header">
                         <div className="d-flex justify-content-between align-items-center">
@@ -66,11 +66,11 @@ const Comment = () => {
                         <p className="card-text">{data.content}</p>
                     </div>
                     <div className="card-footer">
-                        <p className="card-text">{data.createdAt}</p>
+                        <p className="card-text">{newFormatDate(data.createdAt)}</p>
                     </div>
 
                     <div className="card-footer">
-                        <a  className="card-link"><FontAwesomeIcon icon="heart" /> Like</a>
+                        <a className="card-link"><FontAwesomeIcon icon="heart"/> Like</a>
                     </div>
                     <CommentCreation/>
                 </div>

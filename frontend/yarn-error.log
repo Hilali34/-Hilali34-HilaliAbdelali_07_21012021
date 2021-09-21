@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-hot-toast
+  /usr/local/bin/node /usr/local/bin/yarn add moment
 
 PATH: 
-  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/abdelalihilali/Documents/OpenClassroomsProjets/Projet7/HilaliAbdelali_07_21012021/node_modules/.bin
 
 Yarn version: 
   1.22.11
@@ -14,7 +14,7 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/abdelalihilali/Documents/OpenClassroomsProjets/Projet7/HilaliAbdelali_07_21012021/frontend/node_modules/@types/hoist-non-react-statics/index.d.ts'
+  Error: EACCES: permission denied, unlink '/Users/abdelalihilali/Documents/OpenClassroomsProjets/Projet7/HilaliAbdelali_07_21012021/frontend/node_modules/@types/hoist-non-react-statics/README.md'
 
 npm manifest: 
   {
@@ -36,9 +36,11 @@ npm manifest:
       "dotenv": "^10.0.0",
       "jwt-decode": "^3.1.2",
       "lodash": "^4.17.21",
+      "notyf": "^3.10.0",
       "react": "^17.0.0",
       "react-bootstrap": "^1.6.1",
       "react-dom": "^17.0.0",
+      "react-hot-toast": "^2.1.1",
       "react-modal": "^3.14.3",
       "react-redux": "^7.2.5",
       "react-router-dom": "^5.2.0",
@@ -573,6 +575,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
     integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
   
+  goober@^2.0.35:
+    version "2.0.41"
+    resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.41.tgz#0a3d786ff9917bcf2a096eef703bf717838cbec9"
+    integrity sha512-kwjegMT5018zWydhOQlQneCgCtrKJaPsru7TaBWmTYV0nsMeUrM6L6O8JmNYb9UbPMgWcmtf+9p4Y3oJabIH1A==
+  
   has-flag@^3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -685,6 +692,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.75.tgz#6dd8c876b9897a1b8e5a02de26afa79bb54ebbfe"
     integrity sha512-Qe5OUajvqrqDSy6wrWFmMwfJ0jVgwiw4T3KqmbTcZ62qW0gQkheXYhcFM1+lOVcGUoRxcEcfyvFMAnDgaF1VWw==
   
+  notyf@^3.10.0:
+    version "3.10.0"
+    resolved "https://registry.yarnpkg.com/notyf/-/notyf-3.10.0.tgz#67a64443c69ea0e6495c56ea0f91198860163d06"
+    integrity sha512-Mtnp+0qiZxgrH+TzVlzhWyZceHdAZ/UWK0/ju9U0HQeDpap1mZ8cC7H5wSI5mwgni6yeAjaxsTw0sbMK+aSuHw==
+  
   object-assign@^4.1.1:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -764,6 +776,13 @@ Lockfile:
       loose-envify "^1.1.0"
       object-assign "^4.1.1"
       scheduler "^0.20.2"
+  
+  react-hot-toast@^2.1.1:
+    version "2.1.1"
+    resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-2.1.1.tgz#56409ab406b534e9e58274cf98d80355ba0fdda0"
+    integrity sha512-Odrp4wue0fHh0pOfZt5H+9nWCMtqs3wdlFSzZPp7qsxfzmbE26QmGWIh6hG43CukiPeOjA8WQhBJU8JwtWvWbQ==
+    dependencies:
+      goober "^2.0.35"
   
   react-is@^16.13.1, react-is@^16.3.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
     version "16.13.1"

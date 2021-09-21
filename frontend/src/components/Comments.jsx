@@ -1,16 +1,15 @@
 import React from 'react';
 import CommentCard from "./CommentCard";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
 
 const Comments = () => {
 
-    const comments = useSelector( (state) => state.commentReducer )
+    const comments = useSelector((state) => state.commentReducer)
     //console.log(comments)
 
     const commentsIsEmpty = _.isEmpty(comments);
     //console.log(commentsIsEmpty)
-
 
     return (
         <div>

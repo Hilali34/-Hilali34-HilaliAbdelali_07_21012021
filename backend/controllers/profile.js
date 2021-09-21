@@ -5,16 +5,16 @@ exports.getUserProfile = (req, res, next) => {
     const userId = req.params.userId
 
     models.User.findOne({
-        attributes: [ "id", "email", "username", "bio" ],
-        where: { id: userId }
+        attributes: ["id", "email", "username", "bio"],
+        where: {id: userId}
     })
         .then(user => {
             if (user == null) {
-                return res.status(404).json({ error: "Utilisateur non trouvé !" })
+                return res.status(404).json({error: "Utilisateur non trouvé !"})
             }
-            res.status(200).json({ user,message: "L'utilisateur a bien été supprimé"})
+            res.status(200).json({user, message: "L'utilisateur a bien été supprimé"})
         })
-        .catch(error => res.status(500).json({ error: "Impossible de récupérer l'tilisateur !"}))
+        .catch(error => res.status(500).json({error: "Impossible de récupérer l'tilisateur !"}))
 }
 
 exports.updateUserProfile = (req, res, next) => {
@@ -31,37 +31,37 @@ exports.updateUserProfile = (req, res, next) => {
         .then(user => {
 
             if (user.id == userId) {
-                return user.update({email:email, username: username, bio: bio})
-                    .then(() => res.status(200).json({user,message: "L'tilisateur  a été modifié avec succes !"}))
+                return user.update({email: email, username: username, bio: bio})
+                    .then(() => res.status(200).json({user, message: "L'tilisateur  a été modifié avec succes !"}))
                     .catch(error => res.status(500).json({error: "Impossible de mettre à jour les informations !"}));
             }
         })
-    .catch(error => res.status(500).json({error: "Utilisateur introuvable !"}));
+        .catch(error => res.status(500).json({error: "Utilisateur introuvable !"}));
 }
 
 exports.deleteUserProfile = (req, res, next) => {
-  //Params
-   const userId = req.params.userId;
+    //Params
+    const userId = req.params.userId;
 
 
     models.Comment.destroy({
-        where:{Userid: userId}
+        where: {Userid: userId}
     })
 
     models.Like.destroy({
-        where:{Userid: userId}
+        where: {Userid: userId}
     })
 
     models.User.findOne({
-           where: {id: userId}
-       })
-           .then(user => {
-                if (user.id == userId) {
+        where: {id: userId}
+    })
+        .then(user => {
+            if (user.id == userId) {
                 return user.destroy()
-                .then(() => res.status(201).json({message: "L'uilisateur a bien été supprimé !"}))
+                    .then(() => res.status(201).json({message: "L'uilisateur a bien été supprimé !"}))
                     .catch(error => res.status(400).json({error: "Impossible de supprimer l'utilisateur !"}));
-                }
-                res.status(400).json({error: "Impossible de supprimer l'utilisateur !"});
-                })
-                     .catch(error => res.status(404).json({error: "Utilisateur non trouvé !"}));
+            }
+            res.status(400).json({error: "Impossible de supprimer l'utilisateur !"});
+        })
+        .catch(error => res.status(404).json({error: "Utilisateur non trouvé !"}));
 }

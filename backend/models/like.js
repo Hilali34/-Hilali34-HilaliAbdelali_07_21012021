@@ -1,42 +1,42 @@
 'use strict';
 const {
-  Model
+    Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Like extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-      models.Like.belongsTo(models.User, {
-        foreignKey: {
-          allowNull: false
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      }),
-          models.Like.belongsTo(models.Post, {
-            foreignKey: {
-              allowNull: false
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-          })
-    }
-  };
+    class Like extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            models.Like.belongsTo(models.User, {
+                foreignKey: {
+                    allowNull: false
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE'
+            }),
+                models.Like.belongsTo(models.Post, {
+                    foreignKey: {
+                        allowNull: false
+                    },
+                    onUpdate: 'CASCADE',
+                    onDelete: 'CASCADE'
+                })
+        }
+    };
 
-  Like.init({
+    Like.init({
 
-    isLike: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    }
+        isLike: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        }
     }, {
-    sequelize,
-    modelName: 'Like',
-  });
-  return Like;
+        sequelize,
+        modelName: 'Like',
+    });
+    return Like;
 };

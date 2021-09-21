@@ -15,66 +15,66 @@ exports.signup = (req, res, next) => {
     const regexEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/;
     const regexPassword = /^(?=.*\d).{4,}$/;
 
-    if (_.isEmpty(email) || _.isEmpty(password ) || _.isEmpty(username )) {
-        return res.status(200).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
+    if (_.isEmpty(email) || _.isEmpty(password) || _.isEmpty(username)) {
+        return res.status(200).json({error: "Merci de remplir le(s) champ(s) manquant(s) !"});
     }
 
-    if ( username.length < 3) {
+    if (username.length < 3) {
         return res.status(200).json({error: "Merci de saisir un  nom d'utilisateur d'au moisn trois caractères !"})
     }
 
     if (!regexEmail.test(email)) {
-        return res.status(200).json({ error: "Merci de saisir un email valide !" });
+        return res.status(200).json({error: "Merci de saisir un email valide !"});
     }
     if (!regexPassword.test(password)) {
-        return res.status(200).json({ error: "Merci de saisir un mot de passe d'au moins quatre  caractères dont au moins un chiffre" });
+        return res.status(200).json({error: "Merci de saisir un mot de passe d'au moins quatre  caractères dont au moins un chiffre"});
     }
 
-  models.User.findOne({
-   attributes: ["email"],
-    where: { email: email }
+    models.User.findOne({
+        attributes: ["email"],
+        where: {email: email}
     })
-   .then( function (userFound){
+        .then(function (userFound) {
 
-       if(!userFound){
+            if (!userFound) {
 
-           models.User.findOne({
-               attributes: ["username"],
-               where: { username: username }
-           })
-               .then(function (userFound){
-                   if (userFound){
-                       return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser un autre nom !"})
+                models.User.findOne({
+                    attributes: ["username"],
+                    where: {username: username}
+                })
+                    .then(function (userFound) {
+                        if (userFound) {
+                            return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser un autre nom !"})
 
-                   }else{
-                       bcrypt.hash(password, 10)
-                           .then(hash => {
-                               const user = models.User.create({
-                                   email: email,
-                                   username: username,
-                                   password: hash,
-                                   bio: bio
-                               })
-                                   .then(user => {
-                                       res.status(201).json({ message:"utilisateur crée !"});
-                                   })
-                                   .catch(error => res.status(400).json({ error }));
-                           })
-                   }
-               })
+                        } else {
+                            bcrypt.hash(password, 10)
+                                .then(hash => {
+                                    const user = models.User.create({
+                                        email: email,
+                                        username: username,
+                                        password: hash,
+                                        bio: bio
+                                    })
+                                        .then(user => {
+                                            res.status(201).json({message: "utilisateur crée !"});
+                                        })
+                                        .catch(error => res.status(400).json({error}));
+                                })
+                        }
+                    })
 
-               .catch(error => {
-                   res.status(500).json({ error })});
-       }else{
-        return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser  un autr mail!"})
-        }
+                    .catch(error => {
+                        res.status(500).json({error})
+                    });
+            } else {
+                return res.status(200).json({error: "cette utilisateur exite deja,merci d'utiliser  un autr mail!"})
+            }
 
         })
-        .catch( function(err){
-         return res.status(500).json({error: "Impossible de verifier s'il l'utilisateur existe deja !"})
-         })
+        .catch(function (err) {
+            return res.status(500).json({error: "Impossible de verifier s'il l'utilisateur existe deja !"})
+        })
 }
-
 
 
 exports.login = (req, res, next) => {
@@ -85,32 +85,32 @@ exports.login = (req, res, next) => {
 
 
     if (email == null || password == null) {
-        return res.status(400).json({ error: "Merci de remplir le(s) champ(s) manquant(s) !" });
+        return res.status(400).json({error: "Merci de remplir le(s) champ(s) manquant(s) !"});
     }
 
     models.User.findOne({
-        where: { email: email }
+        where: {email: email}
     })
         .then(user => {
             if (!user) {
-                return res.status(200).json({ error: "Utilisateur non trouvé Merci de vous inscrire ! "});
+                return res.status(200).json({error: "Utilisateur non trouvé Merci de vous inscrire ! "});
             }
             bcrypt.compare(password, user.password)
                 .then(valid => {
-                    if(!valid) {
-                        return res.status(200).json({ error: " Mot de passe incorrect ! "});
+                    if (!valid) {
+                        return res.status(200).json({error: " Mot de passe incorrect ! "});
                     }
                     res.status(200).json({
                         username: user.username,
                         userId: user.id,
                         token: jwt.sign(
-                            { userId: user.id},
+                            {userId: user.id},
                             "RANDOM_TOKEN_SECRET",
-                            { expiresIn: "24h"}
+                            {expiresIn: "24h"}
                         )
                     });
                 })
-                .catch(error => res.status(500).json({ error }))
+                .catch(error => res.status(500).json({error}))
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(500).json({error}));
 };

@@ -9,7 +9,7 @@ const PostCreation = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
-    const token = window.localStorage.getItem("userToken").replace(/"/g,'')
+    const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     console.log(token)
 
     const handlePostCreation = async (e) => {
@@ -20,7 +20,7 @@ const PostCreation = () => {
             content
         };
 
-        await dispatch(addPost(data,token))
+        await dispatch(addPost(data, token))
         setTitle("");
         setContent("");
 
@@ -46,7 +46,7 @@ const PostCreation = () => {
                             <input type="text" className="form-control" id="floatingInput"
 
                                    placeholder="Le titre de votre publication"
-                                   value={title}  required onChange={e => setTitle(e.target.value)}
+                                   value={title} required onChange={e => setTitle(e.target.value)}
 
                             />
                         </div>
@@ -54,12 +54,12 @@ const PostCreation = () => {
                             <label className="sr-only" htmlFor="message">Publication</label>
                             <textarea className="form-control" id="message" rows="3"
                                       placeholder="Exprimez-vous!"
-                                      value={content}  required onChange={e => setContent(e.target.value)}
+                                      value={content} required onChange={e => setContent(e.target.value)}
                             />
                         </div>
                         <div className="btn-toolbar justify-content-between mt-3">
                             <button type="submit" className="btn btn-primary">Publier</button>
-                         </div>
+                        </div>
 
                     </form>
 

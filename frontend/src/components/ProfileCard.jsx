@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {editProfile,deleteProfile} from "../actions/profile.action";
+import {editProfile, deleteProfile} from "../actions/profile.action";
 import _ from "lodash";
 import {logout} from "../services/AuthApi";
-import {successDeleteProfile} from "../services/notification";
+import Modal from "react-modal"
 
-const ProfileCard = ({history}) => {
 
-    const aProfile = useSelector( (state) => state.profileReducer )
+const ProfileCard = () => {
+
+    const aProfile = useSelector((state) => state.profileReducer)
     const profileIsEmpty = _.isEmpty(aProfile);
 
     const dispatch = useDispatch();
@@ -18,7 +19,21 @@ const ProfileCard = ({history}) => {
     const [email, setEmail] = useState("");
     const [bio, setBio] = useState("");
 
+    //modal
 
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    Modal.setAppElement('#root')
+
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    };
 
     const handleEditProfile = (e) => {
         e.preventDefault()
@@ -28,7 +43,7 @@ const ProfileCard = ({history}) => {
             username,
             bio
         };
-        dispatch(editProfile(data,userId,token))
+        dispatch(editProfile(data, userId, token))
     };
 
     return (
@@ -41,7 +56,8 @@ const ProfileCard = ({history}) => {
                                 <div className="account-settings">
                                     <div className="user-profile">
 
-                                        <h5 className="user-name">Nom d'utilisateur : {!profileIsEmpty && aProfile.username}</h5>
+                                        <h5 className="user-name">Nom d'utilisateur
+                                            : {!profileIsEmpty && aProfile.username}</h5>
                                         <h6 className="user-email">Email : {!profileIsEmpty && aProfile.email}</h6>
                                     </div>
                                     <div className="about">
@@ -53,7 +69,7 @@ const ProfileCard = ({history}) => {
                         </div>
                     </div>
                     <form className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12"
-                          onSubmit={e =>handleEditProfile(e)}
+                          onSubmit={e => handleEditProfile(e)}
                     >
                         <div className="card h-100">
                             <div className="card-body">
@@ -101,17 +117,44 @@ const ProfileCard = ({history}) => {
                                         <div className="text-right">
                                             <button type="button" id="supprimer" name="supprimer"
                                                     className="btn btn-primary m-2"
-                                                    onClick={() =>{
-                                                        dispatch(deleteProfile(userId,token))
-                                                        logout()
-                                                        location.replace("/")
-
-                                                    } }
+                                                    onClick={() => {
+                                                        setModalIsOpen(true)
+                                                    }}
                                             >Supprimer Mon compte
                                             </button>
                                             <button type="submit" id="miseajour" name="miseajour"
                                                     className="btn btn-primary">Mise à jour
                                             </button>
+
+                                            <Modal
+                                                style={customStyles}
+                                                isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <h5 className="card-title m-4">Etes-vous sûr de vouloir
+                                                            supprimer votre compte ? </h5>
+
+                                                        <button type="button" id="miseajour" name="miseajour"
+                                                                className="btn btn-primary  mx-4"
+                                                                onClick={() => {
+                                                                    setModalIsOpen(false)
+                                                                }}
+
+                                                        >Annuler
+                                                        </button>
+                                                        <button type="button" id="supprimer" name="supprimer"
+                                                                className="btn btn-primary m-2"
+                                                                onClick={() => {
+                                                                    dispatch(deleteProfile(userId, token))
+                                                                    logout()
+                                                                    location.replace("/")
+                                                                }}
+                                                        >Confirmer
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </Modal>
+
                                         </div>
                                     </div>
                                 </div>

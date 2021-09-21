@@ -8,7 +8,8 @@ Etapes d'installation du projet:
 
 3- Dans le dossier frontend exécuter la commande yan install pour installer les dépendances.
 
-4- Renseigner les bonnes informations de la base de donnée dans le fichier config.json situer dans le sous dossier config dans le dossier backend.
+4- Renseigner les bonnes informations de la base de donnée dans le fichier config.json situer dans le sous dossier
+config dans le dossier backend.
 
 5- Dans le dossier backend exécuter la commande sequelize db:migrate pour importer les models.
 

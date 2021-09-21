@@ -3,10 +3,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {NavLink} from "react-router-dom";
 import _ from "lodash";
 import {useDispatch, useSelector} from "react-redux";
-import {editPost, deletePost, likePost, dislikePost} from "../actions/post.action";
+import {editPost, deletePost, likePost, dislikePost, getPosts} from "../actions/post.action";
+import {newFormatDate} from "../utils/formatDate";
 
 const PostCard = ({post}) => {
-
 
 
     const [title, setTitle] = useState("");
@@ -20,24 +20,13 @@ const PostCard = ({post}) => {
     const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     const postId = post.id;
 
+
     const dispatch = useDispatch();
 
 
 
     const isAuthor = post.UserId == userId;
 
-
-    const NewFormatCreateDate = (CreatedAt) => {
-        const dateArray = Array.from(CreatedAt);
-        dateArray.splice(10, 1);
-        dateArray.splice(15, 8);
-        const date = dateArray.slice(0, 10);
-        const hour = dateArray.slice(10);
-        const dateJoin = date.join("");
-        const dateSplit = dateJoin.split("-", 3);
-        const dateReverse = dateSplit.reverse();
-        return "Posté le : " + dateReverse.join(".") + " à " + hour.join("");
-    }
 
 
     const handleEditPost = (e) => {
@@ -49,8 +38,9 @@ const PostCard = ({post}) => {
             content
         };
 
-        dispatch(editPost(data,postId,token))
+        dispatch(editPost(data, postId, token))
         setEditToggle(false);
+        window.location = ("/")
     };
 
     const handleLikePost = async (e) => {
@@ -58,9 +48,9 @@ const PostCard = ({post}) => {
 
         console.log(post)
 
-        await dispatch(likePost(postId,token));
-         setIsLiked(true);
-        if (isDisliked){
+        await dispatch(likePost(postId, token));
+        setIsLiked(true);
+        if (isDisliked) {
             setIsDisliked(false)
         }
 
@@ -70,9 +60,9 @@ const PostCard = ({post}) => {
         e.preventDefault()
 
 
-        await dispatch(dislikePost(postId,token));
+        await dispatch(dislikePost(postId, token));
         setIsDisliked(true);
-        if (isLiked){
+        if (isLiked) {
             setIsLiked(false)
         }
 
@@ -95,84 +85,92 @@ const PostCard = ({post}) => {
                     </div>
 
                 </div>
-        {editToggle ?
+                {editToggle ?
 
-            (
-            <form onSubmit={e =>handleEditPost(e)}>
+                    (
+                        <form onSubmit={e => handleEditPost(e)}>
 
-                <div className="form-group">
-                    <label htmlFor="floatingInput"> </label>
-                    <input type="text" className="form-control" id="floatingInput"
-                           defaultValue={post.title}
-                           required onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="floatingInput"> </label>
-                    <label className="sr-only" htmlFor="message">Publication</label>
-                    <textarea className="form-control" id="message" rows="3"
-                              defaultValue={post.content}
-                              required onChange={(e) => setContent(e.target.value)}
-                    />
-                </div>
-                <div className="card-footer">
-                    <button type="submit" className="me-3 btn btn-primary">Valider</button>
-                    <button type="button" className="me-3 btn btn-primary" onClick={() => setEditToggle(!editToggle)}>annuler</button>
-                </div>
-            </form>
+                            <div className="form-group">
+                                <label htmlFor="floatingInput"> </label>
+                                <input type="text" className="form-control" id="floatingInput"
+                                       placeholder={post.title}
+                                       required onChange={(e) => setTitle(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="floatingInput"> </label>
+                                <label className="sr-only" htmlFor="message">Publication</label>
+                                <textarea className="form-control" id="message" rows="3"
+                                          placeholder={post.content}
+                                          required onChange={(e) => setContent(e.target.value)}
+                                />
+                            </div>
+                            <div className="card-footer">
 
-                ) :
+                                <button type="button" className="m-3 btn-sm btn-primary"
+                                        onClick={() => setEditToggle(!editToggle)}>
+                                    annuler
+                                </button>
 
-                (
-                    <div className="card-body">
-                        <h5 className="card-title">{post.title}</h5>
-                        <p className="card-text"> {post.content} </p>
-                    </div>
-                )
+                                <button type="submit" className="m-3 btn-sm btn-primary">Valider</button>
+
+                            </div>
+                        </form>
+
+                    ) :
+
+                    (
+                        <div className="card-body">
+                            <h5 className="card-title">{post.title}</h5>
+                            <p className="card-text"> {post.content} </p>
+                        </div>
+                    )
 
                 }
-                    <div className="card-footer">
-                    <p className="card-text"> {NewFormatCreateDate(post.createdAt)} </p>
-                    </div>
-                    <div className="card-footer">
+                <div className="card-footer">
+                    <p className="card-text"> {newFormatDate(post.createdAt)} </p>
+                </div>
+                <div className="card-footer">
                     <span className="like-counter text-success">{post.likes}</span>
                     <a className="text-primary mx-3"
-                    onClick={handleLikePost}><FontAwesomeIcon icon="thumbs-up"/></a>
+                       onClick={handleLikePost}><FontAwesomeIcon icon="thumbs-up"/></a>
                     <span className="dislike-counter text-danger">{post.dislikes}</span>
                     <a className="text-primary mx-3"
-                    onClick={handleDislikePost}><FontAwesomeIcon icon="thumbs-down"/></a>
+                       onClick={handleDislikePost}><FontAwesomeIcon icon="thumbs-down"/></a>
 
                     <NavLink to={`/commentaire/${post.id}`} className={"card-link"}><FontAwesomeIcon
-                    icon="comment"/> Commentaire(s)</NavLink>
+                        icon="comment"/> Commentaires</NavLink>
 
-                    </div>
+                </div>
 
-                  {isAuthor ? (
+                {isAuthor ? (
 
                     <div className="card-footer">
 
-                    <button type="button" className=" me-3 btn btn-primary"
+                        <button type="button" className=" me-3 btn btn-primary"
 
-                            onClick={() => dispatch(deletePost(postId,token))}>
+                                onClick={() => dispatch(deletePost(postId, token))}>
 
-                    Supprimer</button>
+                            Supprimer
+                        </button>
 
-                    <button type="button" className="me-3 btn btn-primary"
+                        <button type="button" className="me-3 btn btn-primary"
 
-                            onClick={() => setEditToggle(!editToggle)}
+                                onClick={() => setEditToggle(!editToggle)}
 
-                    >Editer</button>
-
-                    </div>
-
-                    ) : null}
+                        >Editer
+                        </button>
 
                     </div>
 
-                    </div>
+                ) : null}
 
-                    );
+            </div>
 
-                };
+        </div>
 
-                export default PostCard;
+    );
+
+};
+
+export default PostCard;

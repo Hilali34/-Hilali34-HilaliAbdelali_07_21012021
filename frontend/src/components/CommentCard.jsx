@@ -2,28 +2,18 @@ import React, {useState} from 'react';
 import _ from "lodash";
 import {deleteComment, editComment} from "../actions/comment.action";
 import {useDispatch} from "react-redux";
+import {newFormatDate} from "../utils/formatDate";
 
-const CommentCard = ({ comment}) => {
+const CommentCard = ({comment}) => {
+
     const dispatch = useDispatch();
     const userNameIsEmpty = _.isEmpty(comment.User);
-    const token = window.localStorage.getItem("userToken").replace(/"/g,'')
+    const token = window.localStorage.getItem("userToken").replace(/"/g, '')
     const commentId = comment.id;
     const userId = window.localStorage.getItem("userId");
     const isAuthor = comment.UserId == userId;
     const [content, setContent] = useState("");
     const [editToggle, setEditToggle] = useState(false);
-
-    const NewFormatCreateDate = (CreatedAt) => {
-        const dateArray =Array.from(CreatedAt);
-        dateArray.splice(10, 1);
-        dateArray.splice(15, 8);
-        const date = dateArray.slice(0, 10);
-        const hour = dateArray.slice(10);
-        const dateJoin = date.join("");
-        const dateSplit = dateJoin.split("-", 3);
-        const dateReverse = dateSplit.reverse();
-        return "Posté le : "+ dateReverse.join(".") + " à " + hour.join("");
-    }
 
 
     const handleEditComment = async (e) => {
@@ -34,7 +24,7 @@ const CommentCard = ({ comment}) => {
             content
         };
 
-        dispatch(editComment(data,commentId,token))
+        dispatch(editComment(data, commentId, token))
         setEditToggle(false);
 
     };
@@ -57,19 +47,21 @@ const CommentCard = ({ comment}) => {
                 {editToggle ?
 
                     (
-                        <form onSubmit={e =>handleEditComment(e)}>
+                        <form onSubmit={e => handleEditComment(e)}>
 
                             <div className="form-group">
                                 <label htmlFor="floatingInput"> </label>
                                 <label className="sr-only" htmlFor="message">Publication</label>
                                 <textarea className="form-control" id="message" rows="3"
-                                          defaultValue={comment.content}
+                                          placeholder={comment.content}
                                           required onChange={(e) => setContent(e.target.value)}
                                 />
                             </div>
                             <div className="card-footer">
-                                <button type="submit" className="me-3 btn btn-primary">Valider</button>
-                                <button type="button" className="me-3 btn btn-primary" onClick={() => setEditToggle(!editToggle)}>annuler</button>
+                                <button type="submit" className="m-3 btn-sm btn-primary">Valider</button>
+                                <button type="button" className="m-3 btn-sm btn-primary"
+                                        onClick={() => setEditToggle(!editToggle)}>annuler
+                                </button>
                             </div>
                         </form>
 
@@ -84,7 +76,7 @@ const CommentCard = ({ comment}) => {
                 }
 
                 <div className="card-footer">
-                    <p className="card-text"> {NewFormatCreateDate(comment.createdAt)} </p>
+                    <p className="card-text"> {newFormatDate(comment.createdAt)} </p>
                 </div>
 
                 {isAuthor ? (
@@ -93,15 +85,17 @@ const CommentCard = ({ comment}) => {
 
                         <button type="button" className=" me-3 btn btn-primary"
 
-                                onClick={() => dispatch(deleteComment(commentId,token))}>
+                                onClick={() => dispatch(deleteComment(commentId, token))}>
 
-                            Supprimer</button>
+                            Supprimer
+                        </button>
 
                         <button type="button" className="me-3 btn btn-primary"
 
                                 onClick={() => setEditToggle(!editToggle)}
 
-                        >Editer</button>
+                        >Editer
+                        </button>
 
                     </div>
 

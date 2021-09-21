@@ -15,10 +15,10 @@ export const getPosts = () => {
     const tokenIsEmpty = _.isEmpty(token);
 
     return (dispatch) => {
-        return  axios.get("http://localhost:4200/groupomania/post/")
-            .then((res) =>{
+        return axios.get("http://localhost:4200/groupomania/post/")
+            .then((res) => {
 
-                !tokenIsEmpty && dispatch({ type: GET_POSTS, payload: res.data.post})
+                    !tokenIsEmpty && dispatch({type: GET_POSTS, payload: res.data.post})
                 }
             )
             .catch((error) => console.log(error))
@@ -27,32 +27,32 @@ export const getPosts = () => {
 };
 
 
-export const addPost = (data,token) => {
+export const addPost = (data, token) => {
     console.log(data);
 
     return (dispatch) => {
-        return  axios({
+        return axios({
             method: "POST",
-            url:"http://localhost:4200/groupomania/post/",
-            data ,
+            url: "http://localhost:4200/groupomania/post/",
+            data,
             headers: {
                 'authorization': `Bearer ${token}`
             }
 
-        },[])
-            .then((res) =>{
-                    dispatch({ type: ADD_POST, payload: res.data.post})
+        }, [])
+            .then((res) => {
+                    dispatch({type: ADD_POST, payload: res.data.post})
                 }
             )
             .catch((error) => console.log(error))
     };
 };
 
-export const editPost = (data,postId,token) => {
+export const editPost = (data, postId, token) => {
     console.log(data)
 
     return (dispatch) => {
-        return  axios({
+        return axios({
             method: "PUT",
             url: `http://localhost:4200/groupomania/post/${postId}`,
             data,
@@ -63,9 +63,13 @@ export const editPost = (data,postId,token) => {
                 id: postId
             }
 
-        },[])
-            .then((res) =>{
-                dispatch({ type: EDIT_POST, payload: {content:res.data.post.content,title:res.data.post.title,postId,}});
+        }, [])
+            .then((res) => {
+                    console.log(res)
+                    dispatch({
+                        type: EDIT_POST,
+                        payload: {content: res.data.post.content, title: res.data.post.title, postId}
+                    });
 
                 }
             )
@@ -74,12 +78,12 @@ export const editPost = (data,postId,token) => {
 };
 
 
-export const deletePost = (postId,token) => {
+export const deletePost = (postId, token) => {
     console.log(postId);
     console.log(token);
 
     return (dispatch) => {
-        return   axios({
+        return axios({
             method: "DELETE",
             url: `http://localhost:4200/groupomania/post/${postId}`,
             headers: {
@@ -89,10 +93,10 @@ export const deletePost = (postId,token) => {
                 id: postId
             }
 
-        },[])
-            .then((res) =>{
-                console.log(res)
-                dispatch({ type: DELETE_POST, payload: { postId } });
+        }, [])
+            .then((res) => {
+                    console.log(res)
+                    dispatch({type: DELETE_POST, payload: {postId}});
 
                 }
             )
@@ -100,12 +104,12 @@ export const deletePost = (postId,token) => {
     };
 };
 
-export const likePost = (postId,token) => {
+export const likePost = (postId, token) => {
 
 
     return (dispatch) => {
 
-        return  axios({
+        return axios({
             method: "GET",
             url: `http://localhost:4200/groupomania/post/like/${postId}`,
 
@@ -117,10 +121,18 @@ export const likePost = (postId,token) => {
             },
 
 
-        },[])
-            .then((res) =>{
-                console.log(res.data.like.isLike)
-                    dispatch({ type: LIKE_POST, payload: {likes:res.data.post.likes,dislikes:res.data.post.dislikes,isLike:res.data.like.isLike,postId}});
+        }, [])
+            .then((res) => {
+                    console.log(res.data.like.isLike)
+                    dispatch({
+                        type: LIKE_POST,
+                        payload: {
+                            likes: res.data.post.likes,
+                            dislikes: res.data.post.dislikes,
+                            isLike: res.data.like.isLike,
+                            postId
+                        }
+                    });
 
                 }
             )
@@ -128,10 +140,10 @@ export const likePost = (postId,token) => {
     };
 };
 
-export const dislikePost = (postId,token,isLike) => {
+export const dislikePost = (postId, token, isLike) => {
 
     return (dispatch) => {
-        return  axios({
+        return axios({
             method: "GET",
             url: `http://localhost:4200/groupomania/post/dislike/${postId}`,
 
@@ -140,12 +152,20 @@ export const dislikePost = (postId,token,isLike) => {
             },
             params: {
                 id: postId
-            },isLike
+            }, isLike
 
-        },[])
-            .then((res) =>{
+        }, [])
+            .then((res) => {
                     console.log(res.data.like.isLike)
-                dispatch({ type: LIKE_POST, payload: {likes:res.data.post.likes,dislikes:res.data.post.dislikes,isLike:res.data.like.isLike,postId}});
+                    dispatch({
+                        type: LIKE_POST,
+                        payload: {
+                            likes: res.data.post.likes,
+                            dislikes: res.data.post.dislikes,
+                            isLike: res.data.like.isLike,
+                            postId
+                        }
+                    });
 
                 }
             )
