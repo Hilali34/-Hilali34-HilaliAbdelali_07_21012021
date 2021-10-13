@@ -39,7 +39,6 @@ La dierection a promis des mesures d'amélioration de la communication entre col
 ![JAVASCRIPT](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
 ![NODEJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![EXPRESS](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
-![MONGODB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![SEQUELIZE](https://img.shields.io/badge/Sequelize-40a4ec?style=for-the-badge&logo=sequelize&logoColor=white)
 ![MYSQL](https://img.shields.io/badge/Mysql-0275d8?style=for-the-badge&logo=mysql&logoColor=f0ad4e)
 ![BOOTSTRAP](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
